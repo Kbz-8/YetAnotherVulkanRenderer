@@ -15,6 +15,10 @@
 #include <csignal>
 #include <array>
 #include <cstring>
+#include <optional>
+#include <set>
+#include <map>
+#include <algorithm>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_vulkan.h>

@@ -15,6 +15,15 @@ elseif is_mode("release") then
 	add_vectorexts("sse", "sse2", "sse3", "ssse3")
 end
 
+if is_plat("windows", "mingw") then
+	add_defines("VK_USE_PLATFORM_WIN32_KHR")
+elseif is_plat("linux") then
+	add_defines("VK_USE_PLATFORM_XLIB_KHR")
+	add_defines("VK_USE_PLATFORM_WAYLAND_KHR")
+elseif is_plat("macosx") then
+	add_defines("VK_USE_PLATFORM_METAL_EXT")
+end
+
 add_requires("vulkan-headers", "libsdl")
 add_requires("glm", { configs = { header_only = true }})
 
@@ -24,6 +33,8 @@ target("yavr")
 	add_files("Runtime/Sources/**.cpp")
 	add_packages("libsdl", "vulkan-headers", "glm")
 	set_pcxxheader("Runtime/Includes/PreCompiled.h")
+
+	add_links("vulkan")
 
 	on_clean(function(target)
 		if target:objectfiles() then
