@@ -1,7 +1,8 @@
-#include <PreCompiled.h>
+#include <Core/Engine.h>
 
 int main()
 {
-	std::cout << "test" << std::endl;
+	Yavr::Engine engine;
+	engine.Run();
 	return 0;
 }
