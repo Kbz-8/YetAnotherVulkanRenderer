@@ -3,7 +3,7 @@
 
 namespace Yavr
 {
-	const char* VerbaliseVkResult(VkResult result)
+	const char* VerbaliseVkResult(VkResult result) noexcept
 	{
 		switch(result)
 		{
@@ -36,12 +36,52 @@ namespace Yavr
 		return nullptr;
 	}
 
+	VkPipelineStageFlags AccessFlagsToPipelineStage(VkAccessFlags accessFlags, VkPipelineStageFlags stageFlags)
+	{
+		VkPipelineStageFlags stages = 0;
+
+		while(accessFlags != 0)
+		{
+			VkAccessFlagBits AccessFlag = static_cast<VkAccessFlagBits>(accessFlags & (~(accessFlags - 1)));
+			if(AccessFlag == 0 || (AccessFlag & (AccessFlag - 1)) != 0)
+				FatalError("Vulkan : an error has been caught during access flag to pipeline stage operation");
+			accessFlags &= ~AccessFlag;
+
+			switch(AccessFlag)
+			{
+				case VK_ACCESS_INDIRECT_COMMAND_READ_BIT: stages |= VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT; break;
+				case VK_ACCESS_INDEX_READ_BIT: stages |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT; break;
+				case VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT: stages |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT; break;
+				case VK_ACCESS_UNIFORM_READ_BIT: stages |= stageFlags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
+				case VK_ACCESS_INPUT_ATTACHMENT_READ_BIT: stages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; break;
+				case VK_ACCESS_SHADER_READ_BIT: stages |= stageFlags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
+				case VK_ACCESS_SHADER_WRITE_BIT: stages |= stageFlags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
+				case VK_ACCESS_COLOR_ATTACHMENT_READ_BIT: stages |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; break;
+				case VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT: stages |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; break;
+				case VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT: stages |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT; break;
+				case VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT: stages |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT; break;
+				case VK_ACCESS_TRANSFER_READ_BIT: stages |= VK_PIPELINE_STAGE_TRANSFER_BIT; break;
+				case VK_ACCESS_TRANSFER_WRITE_BIT: stages |= VK_PIPELINE_STAGE_TRANSFER_BIT; break;
+				case VK_ACCESS_HOST_READ_BIT: stages |= VK_PIPELINE_STAGE_HOST_BIT; break;
+				case VK_ACCESS_HOST_WRITE_BIT: stages |= VK_PIPELINE_STAGE_HOST_BIT; break;
+				case VK_ACCESS_MEMORY_READ_BIT: break;
+				case VK_ACCESS_MEMORY_WRITE_BIT: break;
+
+				default: Error("Vulkan : unknown access flag"); break;
+			}
+		}
+		return stages;
+	}
+
 	void RenderCore::Init()
 	{
+		if(m_is_init)
+			return;
 		m_instance.Init();
 		m_layers.Init();
 		m_device.Init();
 		m_queues.Init();
+		m_cmd_manager.Init();
 		m_is_init = true;
 	}
 
@@ -49,13 +89,11 @@ namespace Yavr
 	{
 		if(!m_is_init)
 			return;
-
 		vkDeviceWaitIdle(m_device.Get());
-
+		m_cmd_manager.Destroy();
 		m_device.Destroy();
 		m_layers.Destroy();
 		m_instance.Destroy();
-
 		m_is_init = false;
 	}
 }

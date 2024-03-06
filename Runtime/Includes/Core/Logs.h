@@ -58,7 +58,7 @@ namespace Scop
 	#define FatalError(...) FatalError(__LINE__, __FILE__, __func__, __VA_ARGS__)
 
 	#undef  Verify
-	#define Verify(cond, ...) Assert(cond, __LINE__, __FILE__, __func__, __VA_ARGS__)
+	#define Verify(cond, ...) Verify(cond, __LINE__, __FILE__, __func__, __VA_ARGS__)
 
 	#undef  Assert
 	#define Assert(cond, ...) Assert(cond, __LINE__, __FILE__, __func__, __VA_ARGS__)

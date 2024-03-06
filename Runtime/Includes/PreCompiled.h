@@ -19,6 +19,7 @@
 #include <set>
 #include <map>
 #include <algorithm>
+#include <memory>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_vulkan.h>
