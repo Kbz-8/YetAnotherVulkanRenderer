@@ -19,7 +19,6 @@ if is_plat("windows", "mingw") then
 	add_defines("VK_USE_PLATFORM_WIN32_KHR")
 elseif is_plat("linux") then
 	add_defines("VK_USE_PLATFORM_XLIB_KHR")
-	add_defines("VK_USE_PLATFORM_WAYLAND_KHR")
 elseif is_plat("macosx") then
 	add_defines("VK_USE_PLATFORM_METAL_EXT")
 end
