@@ -3,6 +3,7 @@
 
 #include <PreCompiled.h>
 
+#include <Renderer/Renderer.h>
 #include <Platform/Window.h>
 #include <Platform/Inputs.h>
 
@@ -21,6 +22,7 @@ namespace Yavr
 			~Engine();
 
 		private:
+			Renderer m_renderer;
 			Inputs m_inputs;
 			Window m_window;
 			bool m_running = true;

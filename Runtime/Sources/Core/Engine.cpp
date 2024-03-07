@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include <Core/Logs.h>
 #include <Core/EventBus.h>
+#include <Renderer/Core/RenderCore.h>
 
 namespace Yavr
 {
@@ -24,7 +25,7 @@ namespace Yavr
 		EventBus::Send("Engine", Internal::InterruptEvent{});
 	}
 
-	Engine::Engine() : m_window()
+	Engine::Engine()
 	{
 		std::function<void(const EventBase&)> functor = [this](const EventBase& event)
 		{
@@ -39,7 +40,9 @@ namespace Yavr
 
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
 			FatalError("SDL error : unable to init all subsystems : %", SDL_GetError());
+		RenderCore::Get().Init();
 		m_window.Init("Pipelines Pioneer", 1280, 720);
+		m_renderer.Init(&m_window);
 	}
 
 	void Engine::Run()
@@ -48,6 +51,11 @@ namespace Yavr
 		{
 			m_inputs.Update();
 
+			if(m_renderer.BeginFrame())
+			{
+				m_renderer.EndFrame();
+			}
+
 			if(m_running)
 				m_running = !m_inputs.HasRecievedCloseEvent();
 		}
@@ -55,7 +63,9 @@ namespace Yavr
 
 	Engine::~Engine()
 	{
+		m_renderer.Destroy();
 		m_window.Destroy();
+		RenderCore::Get().Destroy();
 		SDL_Quit();
 		Message("Successfully executed !");
 	}

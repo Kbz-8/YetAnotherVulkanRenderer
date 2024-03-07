@@ -35,6 +35,18 @@ namespace Yavr
 		EndEnum
 	};
 	constexpr std::size_t CommandBufferStateCount = static_cast<std::size_t>(CommandBufferState::EndEnum) + 1;
+
+	enum class ImageType
+	{
+		Color = 0,
+		Depth,
+		DepthArray,
+		Cube,
+		Other,
+
+		EndEnum
+	};
+	constexpr std::size_t ImageTypeCount = static_cast<std::size_t>(ImageType::EndEnum) + 1;
 }
 
 #endif
