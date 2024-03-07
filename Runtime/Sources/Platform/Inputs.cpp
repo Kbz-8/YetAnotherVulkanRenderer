@@ -43,13 +43,6 @@ namespace Yavr
 				m_y_rel = m_event.motion.yrel;
 			}
 
-			if( m_event.window.event == SDL_WINDOWEVENT_RESIZED
-				|| m_event.window.event == SDL_WINDOWEVENT_MINIMIZED
-				|| m_event.window.event == SDL_WINDOWEVENT_MAXIMIZED
-				|| m_event.window.event == SDL_WINDOWEVENT_RESTORED
-				|| m_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
-				EventBus::Send("Renderer", ResizeEvent{});
-
 			switch(m_event.type) 
 			{
 				case SDL_KEYDOWN: m_keys[m_event.key.keysym.scancode] = 2; break;
@@ -62,6 +55,14 @@ namespace Yavr
 					switch(m_event.window.event)
 					{
 						case SDL_WINDOWEVENT_CLOSE: m_has_recieved_close_event = true; break;
+
+						case SDL_WINDOWEVENT_RESIZED:
+						case SDL_WINDOWEVENT_MINIMIZED:
+						case SDL_WINDOWEVENT_MAXIMIZED:
+						case SDL_WINDOWEVENT_RESTORED:
+						case SDL_WINDOWEVENT_SIZE_CHANGED:
+							EventBus::Send("Renderer", ResizeEvent{});
+						break;
 
 						default : break;
 					}

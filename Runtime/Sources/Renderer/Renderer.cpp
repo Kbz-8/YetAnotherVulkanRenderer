@@ -36,7 +36,7 @@ namespace Yavr
 			return false;
 		}
 		else if(result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-			FatalError("Vulkan error : failed to acquire swapchain image");
+			FatalError("Vulkan error : failed to acquire swapchain image, %", VerbaliseVkResult(result));
 
 		m_cmd.GetCmdBuffer(m_current_frame_index).Reset();
 		m_cmd.GetCmdBuffer(m_current_frame_index).BeginRecord();
@@ -67,7 +67,7 @@ namespace Yavr
 			m_swapchain.Recreate();
 		}
 		else if(result != VK_SUCCESS)
-			FatalError("Vulkan error : failed to present swap chain image");
+			FatalError("Vulkan error : failed to present swap chain image, %", VerbaliseVkResult(result));
 		m_current_frame_index = (m_current_frame_index + 1) % MAX_FRAMES_IN_FLIGHT;
 	}
 
