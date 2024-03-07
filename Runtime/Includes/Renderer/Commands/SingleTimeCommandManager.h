@@ -3,11 +3,10 @@
 
 #include <PreCompiled.h>
 #include <Renderer/Commands/CommandPool.h>
+#include <Renderer/Commands/CommandBuffer.h>
 
 namespace Yavr
 {
-	class CommandBuffer;
-
 	class SingleTimeCmdManager
 	{
 		friend class RenderCore;

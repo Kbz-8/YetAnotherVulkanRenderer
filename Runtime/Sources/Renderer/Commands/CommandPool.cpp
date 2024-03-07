@@ -1,5 +1,6 @@
 #include <Renderer/Commands/CommandPool.h>
 #include <Renderer/Core/RenderCore.h>
+#include <Renderer/Commands/CommandBuffer.h>
 
 namespace Yavr
 {

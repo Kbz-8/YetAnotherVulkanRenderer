@@ -1,5 +1,6 @@
 #include <Core/Logs.h>
 #include <Renderer/Buffers/GPUBuffer.h>
+#include <Renderer/Commands/CommandBuffer.h>
 
 namespace Yavr
 {
@@ -39,6 +40,33 @@ namespace Yavr
 			if(type == BufferType::Constant)
 				PushToGPU();
 		}
+	}
+
+	void GPUBuffer::CreateBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, const char* name)
+	{
+		VkBufferCreateInfo buffer_info{};
+		buffer_info.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+		buffer_info.size = m_size;
+		buffer_info.usage = usage;
+		buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+		auto device = RenderCore::Get().GetDevice().Get();
+
+		if(vkCreateBuffer(device, &buffer_info, nullptr, &m_buffer) != VK_SUCCESS)
+			FatalError("Vulkan : failed to create buffer");
+
+		VkMemoryRequirements mem_requirements;
+		vkGetBufferMemoryRequirements(device, m_buffer, &mem_requirements);
+
+		VkMemoryAllocateInfo alloc_info{};
+		alloc_info.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+		alloc_info.allocationSize = mem_requirements.size;
+		alloc_info.memoryTypeIndex = *FindMemoryType(mem_requirements.memoryTypeBits, properties);
+
+		if(vkAllocateMemory(device, &alloc_info, nullptr, &m_memory) != VK_SUCCESS)
+			FatalError("Vulkan : failed to allocate buffer memory");
+		if(vkBindBufferMemory(device, m_buffer, m_memory, m_offset) != VK_SUCCESS)
+			FatalError("Vulkan : unable to bind device memory to a buffer object");
 	}
 
 	bool GPUBuffer::CopyFrom(const GPUBuffer& buffer) noexcept

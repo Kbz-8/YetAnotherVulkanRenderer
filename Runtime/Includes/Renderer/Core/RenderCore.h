@@ -23,7 +23,8 @@ namespace Yavr
 	constexpr const int MAX_FRAMES_IN_FLIGHT = 3;
 
 	const char* VerbaliseVkResult(VkResult result) noexcept;
-	VkPipelineStageFlags AccessFlagsToPipelineStage(VkAccessFlags accessFlags, VkPipelineStageFlags stageFlags);
+	VkPipelineStageFlags AccessFlagsToPipelineStage(VkAccessFlags access_flags, VkPipelineStageFlags stage_flags);
+	std::optional<std::uint32_t> FindMemoryType(std::uint32_t type_filter, VkMemoryPropertyFlags properties, bool error = true);
 
 	class RenderCore : public Singleton<RenderCore>
 	{

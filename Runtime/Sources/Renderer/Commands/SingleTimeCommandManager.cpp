@@ -1,4 +1,6 @@
+#include <Renderer/Commands/CommandBuffer.h>
 #include <Renderer/Commands/SingleTimeCommandManager.h>
+#include <Renderer/Enums.h>
 
 namespace Yavr
 {
@@ -23,7 +25,7 @@ namespace Yavr
 			}
 		}
 		m_buffers.emplace_back().Init(CommandBufferType::SingleTime, &m_pool);
-		return _buffers.back();
+		return m_buffers.back();
 	}
 
 	void SingleTimeCmdManager::UpdateSingleTimesCmdBuffersSubmitState() noexcept

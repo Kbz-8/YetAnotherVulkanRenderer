@@ -4,6 +4,8 @@
 #include <Renderer/Buffers/GPUBuffer.h>
 #include <Core/Logs.h>
 #include <Renderer/Core/Semaphore.h>
+#include <Renderer/Commands/CommandManager.h>
+#include <Renderer/Images/Image.h>
 
 namespace Yavr
 {
@@ -153,7 +155,7 @@ namespace Yavr
 		barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 		barrier.image = image.Get();
-		barrier.subresourceRange.aspectMask = isDepthFormat(image.GetFormat()) ? VK_IMAGE_ASPECT_DEPTH_BIT : VK_IMAGE_ASPECT_COLOR_BIT;
+		barrier.subresourceRange.aspectMask = IsDepthFormat(image.GetFormat()) ? VK_IMAGE_ASPECT_DEPTH_BIT : VK_IMAGE_ASPECT_COLOR_BIT;
 		barrier.subresourceRange.baseMipLevel = 0;
 		barrier.subresourceRange.levelCount = 1;
 		barrier.subresourceRange.baseArrayLayer = 0;

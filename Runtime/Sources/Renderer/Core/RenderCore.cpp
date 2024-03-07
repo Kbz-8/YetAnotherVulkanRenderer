@@ -3,6 +3,21 @@
 
 namespace Yavr
 {
+	std::optional<std::uint32_t> FindMemoryType(std::uint32_t type_filter, VkMemoryPropertyFlags properties, bool error)
+	{
+		VkPhysicalDeviceMemoryProperties mem_properties;
+		vkGetPhysicalDeviceMemoryProperties(RenderCore::Get().GetDevice().GetPhysicalDevice(), &mem_properties);
+
+		for(std::uint32_t i = 0; i < mem_properties.memoryTypeCount; i++)
+		{
+			if((type_filter & (1 << i)) && (mem_properties.memoryTypes[i].propertyFlags & properties) == properties)
+				return i;
+		}
+		if(error)
+			FatalError("Vulkan : failed to find suitable memory type");
+		return std::nullopt;
+	}
+
 	const char* VerbaliseVkResult(VkResult result) noexcept
 	{
 		switch(result)
@@ -36,26 +51,26 @@ namespace Yavr
 		return nullptr;
 	}
 
-	VkPipelineStageFlags AccessFlagsToPipelineStage(VkAccessFlags accessFlags, VkPipelineStageFlags stageFlags)
+	VkPipelineStageFlags AccessFlagsToPipelineStage(VkAccessFlags access_flags, VkPipelineStageFlags stage_flags)
 	{
 		VkPipelineStageFlags stages = 0;
 
-		while(accessFlags != 0)
+		while(access_flags != 0)
 		{
-			VkAccessFlagBits AccessFlag = static_cast<VkAccessFlagBits>(accessFlags & (~(accessFlags - 1)));
-			if(AccessFlag == 0 || (AccessFlag & (AccessFlag - 1)) != 0)
+			VkAccessFlagBits _access_flag = static_cast<VkAccessFlagBits>(access_flags & (~(access_flags - 1)));
+			if(_access_flag == 0 || (_access_flag & (_access_flag - 1)) != 0)
 				FatalError("Vulkan : an error has been caught during access flag to pipeline stage operation");
-			accessFlags &= ~AccessFlag;
+			access_flags &= ~_access_flag;
 
-			switch(AccessFlag)
+			switch(_access_flag)
 			{
 				case VK_ACCESS_INDIRECT_COMMAND_READ_BIT: stages |= VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT; break;
 				case VK_ACCESS_INDEX_READ_BIT: stages |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT; break;
 				case VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT: stages |= VK_PIPELINE_STAGE_VERTEX_INPUT_BIT; break;
-				case VK_ACCESS_UNIFORM_READ_BIT: stages |= stageFlags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
+				case VK_ACCESS_UNIFORM_READ_BIT: stages |= stage_flags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
 				case VK_ACCESS_INPUT_ATTACHMENT_READ_BIT: stages |= VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; break;
-				case VK_ACCESS_SHADER_READ_BIT: stages |= stageFlags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
-				case VK_ACCESS_SHADER_WRITE_BIT: stages |= stageFlags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
+				case VK_ACCESS_SHADER_READ_BIT: stages |= stage_flags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
+				case VK_ACCESS_SHADER_WRITE_BIT: stages |= stage_flags | VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT; break;
 				case VK_ACCESS_COLOR_ATTACHMENT_READ_BIT: stages |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; break;
 				case VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT: stages |= VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT; break;
 				case VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT: stages |= VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT; break;
