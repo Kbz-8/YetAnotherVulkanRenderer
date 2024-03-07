@@ -8,7 +8,7 @@ namespace Yavr
 		m_title = title;
 		m_height = height;
 		m_width = width;
-		m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN);
+		m_window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_VULKAN | SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 		if(!m_window)
 			FatalError("Unable to open a new window, %", SDL_GetError());
 		Message("New window created");

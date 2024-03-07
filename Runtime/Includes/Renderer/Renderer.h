@@ -9,9 +9,15 @@
 #include <Renderer/Core/Semaphore.h>
 #include <Renderer/Core/Surface.h>
 #include <Renderer/Images/Image.h>
+#include <Core/EventBase.h>
 
 namespace Yavr
 {
+	struct ResizeEvent : public EventBase
+	{
+		std::uint32_t What() const override { return 24; }
+	};
+
 	class Renderer
 	{
 		public:

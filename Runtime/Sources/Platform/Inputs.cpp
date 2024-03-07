@@ -1,4 +1,6 @@
 #include <Platform/Inputs.h>
+#include <Core/EventBus.h>
+#include <Renderer/Renderer.h>
 
 namespace Yavr
 {
@@ -40,6 +42,13 @@ namespace Yavr
 				m_x_rel = m_event.motion.xrel;
 				m_y_rel = m_event.motion.yrel;
 			}
+
+			if( m_event.window.event == SDL_WINDOWEVENT_RESIZED
+				|| m_event.window.event == SDL_WINDOWEVENT_MINIMIZED
+				|| m_event.window.event == SDL_WINDOWEVENT_MAXIMIZED
+				|| m_event.window.event == SDL_WINDOWEVENT_RESTORED
+				|| m_event.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
+				EventBus::Send("Renderer", ResizeEvent{});
 
 			switch(m_event.type) 
 			{

@@ -1,11 +1,19 @@
 #include <Renderer/Renderer.h>
 #include <Platform/Window.h>
+#include <Core/EventBus.h>
 #include <Core/Logs.h>
 
 namespace Yavr
 {
 	void Renderer::Init(NonOwningPtr<Window> window)
 	{
+		std::function<void(const EventBase&)> functor = [this](const EventBase& event)
+		{
+			if(event.What() == 24)
+				this->RequireFramebufferResize();
+		};
+		EventBus::RegisterListener({ functor, "Renderer" });
+
 		m_surface.Init(*window);
 		m_swapchain.Init(this);
 		m_cmd.Init();
