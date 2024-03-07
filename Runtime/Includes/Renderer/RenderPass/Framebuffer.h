@@ -11,7 +11,6 @@ namespace Yavr
 	{
 		std::vector<RenderPassAttachment> attachments;
 		NonOwningPtr<RenderPass> renderpass;
-		NonOwningPtr<class RendererComponent> renderer;
 		uint32_t width = 0;
 		uint32_t height = 0;
 		bool screen_fbo = false;

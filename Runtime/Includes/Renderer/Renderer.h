@@ -33,7 +33,7 @@ namespace Yavr
 			inline NonOwningPtr<class Window> GetWindow() { return m_window; }
 			inline Surface& GetSurface() noexcept { return m_surface; }
 			inline CommandPool& GetCmdPool() noexcept { return m_cmd.GetCmdPool(); }
-			inline Swapchain& GetSwapChain() noexcept { return m_swapchain; }
+			inline Swapchain& GetSwapchain() noexcept { return m_swapchain; }
 			inline Semaphore& GetSemaphore(int i) noexcept { return m_semaphores[i]; }
 			inline CommandBuffer& GetCmdBuffer(int i) noexcept { return m_cmd.GetCmdBuffer(i); }
 			inline CommandBuffer& GetActiveCmdBuffer() noexcept { return m_cmd.GetCmdBuffer(m_current_frame_index); }
