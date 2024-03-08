@@ -29,8 +29,8 @@ namespace Yavr
 
 			void Swap(GPUBuffer& buffer) noexcept;
 
-			inline VkBuffer& operator()() noexcept { return m_buffer; }
-			inline VkBuffer& Get() noexcept { return m_buffer; }
+			inline VkBuffer operator()() const noexcept { return m_buffer; }
+			inline VkBuffer Get() const noexcept { return m_buffer; }
 			inline VkDeviceMemory GetMemory() const noexcept { return m_memory; }
 			inline VkDeviceSize GetSize() const noexcept { return m_size; }
 			inline VkDeviceSize GetOffset() const noexcept { return m_offset; }

@@ -50,7 +50,7 @@ namespace Yavr
 		m_state = CommandBufferState::Recording;
 	}
 
-	void CommandBuffer::BindVertexBuffer(GPUBuffer& buffer) noexcept
+	void CommandBuffer::BindVertexBuffer(const GPUBuffer& buffer) noexcept
 	{
 		if(!IsRecording())
 		{
@@ -58,10 +58,11 @@ namespace Yavr
 			return;
 		}
 		VkDeviceSize offset[] = { buffer.GetOffset() };
-		vkCmdBindVertexBuffers(m_cmd_buffer, 0, 1, &buffer.Get(), offset);
+		VkBuffer vkbuffer = buffer.Get();
+		vkCmdBindVertexBuffers(m_cmd_buffer, 0, 1, &vkbuffer, offset);
 	}
 
-	void CommandBuffer::BindIndexBuffer(GPUBuffer& buffer) noexcept
+	void CommandBuffer::BindIndexBuffer(const GPUBuffer& buffer) noexcept
 	{
 		if(!IsRecording())
 		{
@@ -71,7 +72,7 @@ namespace Yavr
 		vkCmdBindIndexBuffer(m_cmd_buffer, buffer.Get(), buffer.GetOffset(), VK_INDEX_TYPE_UINT16);
 	}
 
-	void CommandBuffer::CopyBuffer(GPUBuffer& dst, GPUBuffer& src) noexcept
+	void CommandBuffer::CopyBuffer(const GPUBuffer& dst, const GPUBuffer& src) noexcept
 	{
 		if(!IsRecording())
 		{
@@ -88,7 +89,7 @@ namespace Yavr
 		PostTransferBarrier();
 	}
 
-	void CommandBuffer::CopyBufferToImage(GPUBuffer& buffer, Image& image) noexcept
+	void CommandBuffer::CopyBufferToImage(const GPUBuffer& buffer, Image& image) noexcept
 	{
 		if(!IsRecording())
 		{
@@ -114,7 +115,7 @@ namespace Yavr
 		PostTransferBarrier();
 	}
 
-	void CommandBuffer::CopyImagetoBuffer(Image& image, GPUBuffer& buffer) noexcept
+	void CommandBuffer::CopyImagetoBuffer(Image& image, const GPUBuffer& buffer) noexcept
 	{
 		if(!IsRecording())
 		{

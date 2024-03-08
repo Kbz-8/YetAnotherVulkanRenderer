@@ -6,6 +6,10 @@
 #include <Renderer/RenderPass/Renderpass.h>
 #include <Renderer/RenderPass/Framebuffer.h>
 #include <Renderer/Descriptors/DescriptorSetLayout.h>
+#include <Renderer/Descriptors/DescriptorPool.h>
+#include <Renderer/Descriptors/DescriptorSet.h>
+#include <Renderer/Buffers/UniformBuffer.h>
+#include <Renderer/Matrices.h>
 #include <Renderer/Images/Depth.h>
 
 namespace Yavr
@@ -17,6 +21,7 @@ namespace Yavr
 
 			void Init(NonOwningPtr<class Renderer> renderer);
 			bool BindPipeline(CommandBuffer& command_buffer) noexcept override;
+			void SetMatricesData(const MatricesData& data);
 			void EndPipeline(CommandBuffer& command_buffer) noexcept override;
 			void Destroy() noexcept;
 
@@ -33,8 +38,11 @@ namespace Yavr
 		private:
 			std::vector<Framebuffer> m_framebuffers;
 			std::vector<DescriptorSetLayout> m_descriptor_sets_layout;
+			std::vector<DescriptorSet> m_descriptor_sets;
+			UniformBuffer m_ubo;
 			RenderPass m_renderpass;
 			DepthImage m_depth;
+			DescriptorPool m_pool;
 			VkPipeline m_pipeline = VK_NULL_HANDLE;
 			VkPipelineCache _cache = VK_NULL_HANDLE;
 			VkPipelineLayout m_pipeline_layout = VK_NULL_HANDLE;

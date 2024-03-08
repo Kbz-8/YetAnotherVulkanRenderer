@@ -21,22 +21,28 @@ namespace Yavr
 			m_usage = usage;
 			m_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		}
-		else // LowDynamic
+		else // LowDynamic or Staging
 		{
-			m_usage = usage;
-			m_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
+			m_usage = usage | VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
+			m_flags = VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 		}
+
+		if(type == BufferType::Staging && data.Empty())
+			Warning("Vulkan : trying to create staging buffer without data (wtf?)");
 
 		m_size = size;
 
 		CreateBuffer(m_usage, m_flags, name);
 
-		if(type == BufferType::Constant || !data.Empty())
+		if(type == BufferType::Constant || type == BufferType::HighDynamic || !data.Empty())
 		{
-			void* mapped = nullptr;
-			MapMem(&mapped);
-				std::memcpy(mapped, data.GetData(), data.GetSize());
-			UnMapMem();
+			if(!data.Empty())
+			{
+				void* mapped = nullptr;
+				MapMem(&mapped);
+					std::memcpy(mapped, data.GetData(), data.GetSize());
+				UnMapMem();
+			}
 			if(type == BufferType::Constant)
 				PushToGPU();
 		}
@@ -67,6 +73,7 @@ namespace Yavr
 			FatalError("Vulkan : failed to allocate buffer memory");
 		if(vkBindBufferMemory(device, m_buffer, m_memory, m_offset) != VK_SUCCESS)
 			FatalError("Vulkan : unable to bind device memory to a buffer object");
+		Message("Vulkan : created buffer");
 	}
 
 	bool GPUBuffer::CopyFrom(const GPUBuffer& buffer) noexcept
@@ -85,7 +92,7 @@ namespace Yavr
 		CommandBuffer& cmd = RenderCore::Get().GetSingleTimeCmdBuffer();
 		cmd.BeginRecord();
 
-		cmd.CopyBuffer(*this, const_cast<GPUBuffer&>(buffer));
+		cmd.CopyBuffer(*this, buffer);
 
 		cmd.EndRecord();
 		cmd.SubmitIdle();
@@ -109,6 +116,7 @@ namespace Yavr
 		if(new_buffer.CopyFrom(*this))
 			Swap(new_buffer);
 		new_buffer.Destroy();
+		Message("Vulkan : pushed buffer to GPU memory");
 	}
 
 	void GPUBuffer::Destroy() noexcept
@@ -117,6 +125,7 @@ namespace Yavr
 		vkFreeMemory(RenderCore::Get().GetDevice().Get(), m_memory, nullptr);
 		m_buffer = VK_NULL_HANDLE;
 		m_memory = VK_NULL_HANDLE;
+		Message("Vulkan : destroyed buffer");
 	}
 
 	void GPUBuffer::Swap(GPUBuffer& buffer) noexcept

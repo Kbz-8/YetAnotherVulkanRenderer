@@ -56,6 +56,8 @@ namespace Yavr
 
 			if(m_renderer.BeginFrame())
 			{
+				m_matrices.model = glm::mat4();
+				m_graphic_pipeline.SetMatricesData(m_matrices);
 				m_graphic_pipeline.BindPipeline(m_renderer.GetActiveCmdBuffer());
 				m_graphic_pipeline.EndPipeline(m_renderer.GetActiveCmdBuffer());
 				m_renderer.EndFrame();

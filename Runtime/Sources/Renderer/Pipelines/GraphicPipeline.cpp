@@ -206,8 +206,25 @@ namespace Yavr
 		if(vkCreateGraphicsPipelines(RenderCore::Get().GetDevice().Get(), VK_NULL_HANDLE, 1, &pipeline_info, nullptr, &m_pipeline) != VK_SUCCESS)
 			FatalError("Vulkan : failed to create a graphics pipeline");
 		Message("Vulkan : created new graphic pipeline");
+
 		vkDestroyShaderModule(RenderCore::Get().GetDevice().Get(), frag_shader_module, nullptr);
 		vkDestroyShaderModule(RenderCore::Get().GetDevice().Get(), vert_shader_module, nullptr);
+
+		m_ubo.Init(m_renderer, sizeof(MatricesData));
+
+		VkDescriptorPoolSize pool_sizes[] = {
+			{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 512 }
+		};
+		m_pool.Init((sizeof(pool_sizes) / sizeof(VkDescriptorPoolSize)), pool_sizes);
+		m_descriptor_sets.emplace_back().Init(m_renderer, &m_descriptor_sets_layout[0], &m_pool);
+		m_descriptor_sets.back().WriteDescriptor(0, m_ubo);
+	}
+
+	void GraphicPipeline::SetMatricesData(const MatricesData& data)
+	{
+		CPUBuffer buffer(sizeof(MatricesData));
+		std::memcpy(buffer.GetData(), &data, buffer.GetSize());
+		m_ubo.SetData(std::move(buffer));
 	}
 
 	bool GraphicPipeline::BindPipeline(CommandBuffer& command_buffer) noexcept
@@ -215,6 +232,13 @@ namespace Yavr
 		if(!m_renderer->IsRendering())
 			return false;
 		auto& fb = m_framebuffers[m_renderer->GetSwapchainImageIndex()];
+
+		static std::vector<VkDescriptorSet> sets; // cache
+		if(sets.empty())
+		{
+			for(auto& set : m_descriptor_sets)
+				sets.emplace_back(set.Get());
+		}
 
 		VkViewport viewport{};
 		viewport.x = 0.0f;
@@ -234,6 +258,8 @@ namespace Yavr
 		vkCmdBindPipeline(command_buffer.Get(), GetPipelineBindPoint(), GetPipeline());
 
 		m_renderpass.Begin(command_buffer, { 0.f, 0.f, 0.f, 0.f }, fb);
+
+		vkCmdBindDescriptorSets(m_renderer->GetActiveCmdBuffer().Get(), GetPipelineBindPoint(), GetPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 		return true;
 	}
 
@@ -255,6 +281,8 @@ namespace Yavr
 			layout.Destroy();
 		vkDestroyPipeline(RenderCore::Get().GetDevice().Get(), m_pipeline, nullptr);
 		vkDestroyPipelineLayout(RenderCore::Get().GetDevice().Get(), m_pipeline_layout, nullptr);
+		m_ubo.Destroy();
+		m_pool.Destroy();
 		Message("Vulkan : graphic pipeline destroyed");
 	}
 }

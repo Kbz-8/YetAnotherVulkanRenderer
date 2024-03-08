@@ -10,6 +10,7 @@ namespace Yavr
 	class CPUBuffer
 	{
 		public:
+			CPUBuffer() {}
 			CPUBuffer(std::size_t size) try : m_data(new std::uint8_t[size]), m_size(size)
 			{}
 			catch(...)

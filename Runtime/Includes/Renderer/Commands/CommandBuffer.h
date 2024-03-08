@@ -28,11 +28,11 @@ namespace Yavr
 			inline void Reset() noexcept { vkResetCommandBuffer(m_cmd_buffer, 0); }
 			void EndRecord();
 
-			void BindVertexBuffer(GPUBuffer& buffer) noexcept;
-			void BindIndexBuffer(GPUBuffer& buffer) noexcept;
-			void CopyBuffer(GPUBuffer& dst, GPUBuffer& src) noexcept;
-			void CopyBufferToImage(GPUBuffer& buffer, Image& image) noexcept;
-			void CopyImagetoBuffer(Image& image, GPUBuffer& buffer) noexcept;
+			void BindVertexBuffer(const GPUBuffer& buffer) noexcept;
+			void BindIndexBuffer(const GPUBuffer& buffer) noexcept;
+			void CopyBuffer(const GPUBuffer& dst, const GPUBuffer& src) noexcept;
+			void CopyBufferToImage(const GPUBuffer& buffer, Image& image) noexcept;
+			void CopyImagetoBuffer(Image& image, const GPUBuffer& buffer) noexcept;
 			void TransitionImageLayout(Image& image, VkImageLayout new_layout) noexcept;
 
 			inline bool IsInit() const noexcept { return m_state != CommandBufferState::Uninit; }

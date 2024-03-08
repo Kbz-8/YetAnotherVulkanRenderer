@@ -27,6 +27,7 @@ namespace Yavr
 			GraphicPipeline m_graphic_pipeline;
 			Inputs m_inputs;
 			Window m_window;
+			MatricesData m_matrices;
 			bool m_running = true;
 	};
 }

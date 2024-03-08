@@ -8,6 +8,7 @@ namespace Yavr
 	enum class BufferType
 	{
 		Constant = 0,
+		Staging,
 		HighDynamic, // typically stored in RAM
 		LowDynamic,  // typically stored in VRAM
 
