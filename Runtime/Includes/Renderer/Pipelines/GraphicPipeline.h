@@ -5,6 +5,7 @@
 #include <Renderer/Pipelines/Pipeline.h>
 #include <Renderer/RenderPass/Renderpass.h>
 #include <Renderer/RenderPass/Framebuffer.h>
+#include <Renderer/Images/Depth.h>
 
 namespace Yavr
 {
@@ -14,8 +15,8 @@ namespace Yavr
 			GraphicPipeline() = default;
 
 			void Init(NonOwningPtr<class Renderer> renderer);
-			bool BindPipeline(CommandBuffer& commandBuffer) noexcept override;
-			void EndPipeline(CommandBuffer& commandBuffer) noexcept override;
+			bool BindPipeline(CommandBuffer& command_buffer) noexcept override;
+			void EndPipeline(CommandBuffer& command_buffer) noexcept override;
 			void Destroy() noexcept;
 
 			inline const VkPipeline& GetPipeline() const override { return m_pipeline; }
@@ -31,6 +32,7 @@ namespace Yavr
 		private:
 			std::vector<Framebuffer> m_framebuffers;
 			RenderPass m_renderpass;
+			DepthImage m_depth;
 			VkPipeline m_pipeline = VK_NULL_HANDLE;
 			VkPipelineCache _cache = VK_NULL_HANDLE;
 			VkPipelineLayout m_pipeline_layout = VK_NULL_HANDLE;

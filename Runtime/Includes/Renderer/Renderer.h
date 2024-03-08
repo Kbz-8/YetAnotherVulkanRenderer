@@ -38,9 +38,11 @@ namespace Yavr
 			inline CommandBuffer& GetCmdBuffer(int i) noexcept { return m_cmd.GetCmdBuffer(i); }
 			inline CommandBuffer& GetActiveCmdBuffer() noexcept { return m_cmd.GetCmdBuffer(m_current_frame_index); }
 			inline std::uint32_t GetActiveImageIndex() noexcept { return m_current_frame_index; }
-			inline std::uint32_t GetImageIndex() noexcept { return m_swapchain_image_index; }
+			inline std::uint32_t GetSwapchainImageIndex() noexcept { return m_swapchain_image_index; }
 
 			constexpr inline void RequireFramebufferResize() noexcept { m_framebuffers_resize = true; }
+			inline bool IsFramebufferResizeRequested() const noexcept { return m_framebuffers_resize; }
+			inline bool IsRendering() const noexcept { return m_is_rendering; }
 
 			~Renderer() = default;
 
@@ -55,6 +57,7 @@ namespace Yavr
 			std::uint32_t m_current_frame_index = 0;
 			std::uint32_t m_swapchain_image_index = 0;
 			bool m_framebuffers_resize = false;
+			bool m_is_rendering = false;
 	};
 }
 

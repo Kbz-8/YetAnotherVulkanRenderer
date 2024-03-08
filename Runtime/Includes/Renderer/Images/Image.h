@@ -12,6 +12,7 @@ namespace Yavr
 	bool IsDepthFormat(VkFormat format);
 	VkFormat BitsToFormat(std::uint32_t bits);
 	VkPipelineStageFlags LayoutToAccessMask(VkImageLayout layout, bool is_destination);
+	VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
 	class Image
 	{

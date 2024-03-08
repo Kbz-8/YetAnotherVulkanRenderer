@@ -36,6 +36,10 @@ target("yavr")
 
 	add_links("vulkan")
 
+	on_load(function(target)
+		os.run("sh ./Scripts/CompileShaders.sh %s", os.workingdir())
+	end)
+
 	on_clean(function(target)
 		if target:objectfiles() then
 			for _, file in ipairs(target:objectfiles()) do
@@ -48,6 +52,10 @@ target("yavr")
 		if target:targetfile() and os.exists(target:targetfile()) then
 			print("Removing " .. target:targetfile())
 			os.rm(target:targetfile())
+		end
+		if os.exists(os.workingdir() .. "/Shaders/Build/") then
+			print("Removing shaders build dir")
+			os.rm(os.workingdir() .. "/Shaders/Build")
 		end
 	end)
 target_end() -- optional but I think the code is cleaner with this

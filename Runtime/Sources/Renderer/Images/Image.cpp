@@ -85,6 +85,22 @@ namespace Yavr
 		return access_mask;
 	}
 
+	VkFormat FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+	{
+		for(VkFormat format : candidates)
+		{
+			VkFormatProperties props;
+			vkGetPhysicalDeviceFormatProperties(RenderCore::Get().GetDevice().GetPhysicalDevice(), format, &props);
+			if(tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
+				return format;
+			else if(tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+				return format;
+		}
+
+		Error("Vulkan : failed to find image format");
+		return VK_FORMAT_R8G8B8A8_SRGB;
+	}
+
 	void Image::Init(std::uint32_t width, std::uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, std::vector<VkMemoryPropertyFlags> properties, const char* name)
 	{
 		m_width = width;

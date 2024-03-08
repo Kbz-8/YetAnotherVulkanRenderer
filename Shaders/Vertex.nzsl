@@ -1,0 +1,36 @@
+[nzsl_version("1.0")]
+module;
+
+struct VertOut
+{
+	[location(0)] color: vec4[f32],
+	[builtin(position)] pos: vec4[f32]
+}
+
+struct VertIn
+{
+	[location(0)] pos: vec3[f32],
+	[location(1)] color: vec4[f32],
+}
+
+[layout(std140)]
+struct Matrices
+{
+	view: mat4[f32],
+	model: mat4[f32],
+	projection: mat4[f32]
+}
+
+external
+{
+	[set(0), binding(0)] matrices: uniform[Matrices]
+}
+
+[entry(vert)]
+fn main(input: VertIn) -> VertOut
+{
+	let output: VertOut;
+	output.pos = matrices.projection * matrices.view * matrices.model * vec4[f32](input.pos, 1.0);
+	output.color = input.color;
+	return output;
+}
