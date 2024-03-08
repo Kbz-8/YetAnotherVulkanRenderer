@@ -60,8 +60,10 @@ namespace Yavr
 
 	void RenderPass::Init(std::vector<RenderPassAttachment> attachments)
 	{
-		std::vector<VkAttachmentDescription> attachments_desc;
+		if(m_renderpass != VK_NULL_HANDLE)
+			return;
 
+		std::vector<VkAttachmentDescription> attachments_desc;
 		std::vector<VkAttachmentReference> color_attachment_references;
 		std::vector<VkAttachmentReference> depth_attachment_references;
 
@@ -158,6 +160,8 @@ namespace Yavr
 
 	void RenderPass::Destroy() noexcept
 	{
+		if(m_renderpass == VK_NULL_HANDLE)
+			return;
 		vkDestroyRenderPass(RenderCore::Get().GetDevice().Get(), m_renderpass, nullptr);
 		m_renderpass = VK_NULL_HANDLE;
 		Message("Vulkan : destroyed a renderpass");

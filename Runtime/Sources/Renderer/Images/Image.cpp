@@ -275,6 +275,8 @@ namespace Yavr
 
 		if(m_image != VK_NULL_HANDLE)
 		{
+			vkFreeMemory(RenderCore::Get().GetDevice().Get(), m_memory, nullptr);
+			vkDestroyImage(RenderCore::Get().GetDevice().Get(), m_image, nullptr);
 		}
 		m_image = VK_NULL_HANDLE;
 	}

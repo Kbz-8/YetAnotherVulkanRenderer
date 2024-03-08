@@ -15,4 +15,10 @@ namespace Yavr
 		}
 		Warning("Event Bus : listener not found, '%'", listener_name);
 	}
+
+	void EventBus::SendBroadcast(const EventBase& event)
+	{
+		for(const EventListener& listener : s_listeners)
+			listener.Call(event);
+	}
 }

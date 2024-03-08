@@ -7,6 +7,8 @@ namespace Yavr
 {
 	void Framebuffer::Init(FramebufferDesc& desc)
 	{
+		if(m_framebuffer != VK_NULL_HANDLE)
+			return;
 		if(!desc.renderpass)
 			FatalError("Vulkan : unable to create a new frame buffer, render pass pointer has expired");
 
@@ -35,7 +37,10 @@ namespace Yavr
 
 	void Framebuffer::Destroy() noexcept
 	{
+		if(m_framebuffer == VK_NULL_HANDLE)
+			return;
 		vkDestroyFramebuffer(RenderCore::Get().GetDevice().Get(), m_framebuffer, nullptr);
 		m_framebuffer = VK_NULL_HANDLE;
+		Message("Vulkan : destroyed a framebuffer");
 	}
 }

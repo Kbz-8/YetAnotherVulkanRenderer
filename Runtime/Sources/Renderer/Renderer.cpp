@@ -47,6 +47,7 @@ namespace Yavr
 
 	void Renderer::EndFrame()
 	{
+		m_framebuffers_resize = false;
 		m_is_rendering = false;
 		m_cmd.GetCmdBuffer(m_current_frame_index).EndRecord();
 		m_cmd.GetCmdBuffer(m_current_frame_index).Submit(&m_semaphores[m_current_frame_index]);

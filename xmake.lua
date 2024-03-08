@@ -34,6 +34,10 @@ target("yavr")
 	add_packages("libsdl", "vulkan-headers", "glm")
 	set_pcxxheader("Runtime/Includes/PreCompiled.h")
 
+	add_defines("VERTEX_SHADER_FILE=\"$(projectdir)/Shaders/Build/Vertex.spv\"")
+	add_defines("FRAGMENT_SHADER_FILE=\"$(projectdir)/Shaders/Build/Fragment.spv\"")
+	add_defines("FRACTAL_COMPUTE_SHADER_FILE=\"$(projectdir)/Shaders/Build/FractalCompute.spv\"")
+
 	add_links("vulkan")
 
 	on_load(function(target)

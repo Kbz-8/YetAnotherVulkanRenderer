@@ -1,3 +1,4 @@
+#include "Utils/NonOwningPtr.h"
 #include <PreCompiled.h>
 #include <Core/Engine.h>
 #include <SDL2/SDL.h>
@@ -40,9 +41,11 @@ namespace Yavr
 
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
 			FatalError("SDL error : unable to init all subsystems : %", SDL_GetError());
+
 		RenderCore::Get().Init();
 		m_window.Init("Pipelines Pioneer", 1280, 720);
 		m_renderer.Init(&m_window);
+		m_graphic_pipeline.Init(&m_renderer);
 	}
 
 	void Engine::Run()
@@ -53,6 +56,8 @@ namespace Yavr
 
 			if(m_renderer.BeginFrame())
 			{
+				m_graphic_pipeline.BindPipeline(m_renderer.GetActiveCmdBuffer());
+				m_graphic_pipeline.EndPipeline(m_renderer.GetActiveCmdBuffer());
 				m_renderer.EndFrame();
 			}
 
@@ -63,6 +68,7 @@ namespace Yavr
 
 	Engine::~Engine()
 	{
+		m_graphic_pipeline.Destroy();
 		m_renderer.Destroy();
 		m_window.Destroy();
 		RenderCore::Get().Destroy();

@@ -6,6 +6,7 @@
 #include <Renderer/Renderer.h>
 #include <Platform/Window.h>
 #include <Platform/Inputs.h>
+#include <Renderer/Pipelines/GraphicPipeline.h>
 
 namespace Yavr
 {
@@ -23,6 +24,7 @@ namespace Yavr
 
 		private:
 			Renderer m_renderer;
+			GraphicPipeline m_graphic_pipeline;
 			Inputs m_inputs;
 			Window m_window;
 			bool m_running = true;

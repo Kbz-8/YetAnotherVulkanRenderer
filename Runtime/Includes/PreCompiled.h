@@ -20,6 +20,8 @@
 #include <map>
 #include <algorithm>
 #include <memory>
+#include <filesystem>
+#include <fstream>
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>

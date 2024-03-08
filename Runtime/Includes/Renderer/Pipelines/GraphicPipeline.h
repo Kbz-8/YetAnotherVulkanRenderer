@@ -5,6 +5,7 @@
 #include <Renderer/Pipelines/Pipeline.h>
 #include <Renderer/RenderPass/Renderpass.h>
 #include <Renderer/RenderPass/Framebuffer.h>
+#include <Renderer/Descriptors/DescriptorSetLayout.h>
 #include <Renderer/Images/Depth.h>
 
 namespace Yavr
@@ -31,6 +32,7 @@ namespace Yavr
 
 		private:
 			std::vector<Framebuffer> m_framebuffers;
+			std::vector<DescriptorSetLayout> m_descriptor_sets_layout;
 			RenderPass m_renderpass;
 			DepthImage m_depth;
 			VkPipeline m_pipeline = VK_NULL_HANDLE;

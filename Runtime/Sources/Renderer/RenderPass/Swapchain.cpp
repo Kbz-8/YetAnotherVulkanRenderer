@@ -1,10 +1,19 @@
 #include <Renderer/RenderPass/Swapchain.h>
 #include <Renderer/Images/Image.h>
 #include <Renderer/Renderer.h>
+#include <Core/EventBus.h>
 #include <Core/Logs.h>
 
 namespace Yavr
 {
+	namespace Internal
+	{
+		struct ResizeEventBroadcast : public EventBase
+		{
+			std::uint32_t What() const override { return 56; }
+		};
+	}
+
 	void Swapchain::Init(NonOwningPtr<Renderer> renderer)
 	{
 		auto device = RenderCore::Get().GetDevice().Get();
@@ -96,9 +105,14 @@ namespace Yavr
 		return details;
 	}
 
-	VkPresentModeKHR Swapchain::ChooseSwapPresentMode([[maybe_unused]] const std::vector<VkPresentModeKHR>& available_present_modes)
+	VkPresentModeKHR Swapchain::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& available_present_modes)
 	{
-		return VK_PRESENT_MODE_IMMEDIATE_KHR;
+		for(const auto& mode : available_present_modes)
+		{
+			if(mode == VK_PRESENT_MODE_MAILBOX_KHR)
+				return mode;
+		}
+		return VK_PRESENT_MODE_FIFO_KHR;
 	}
 
 	VkExtent2D Swapchain::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities)
@@ -121,6 +135,7 @@ namespace Yavr
 	{
 		Destroy();
 		Init(m_renderer);
+		EventBus::SendBroadcast(Internal::ResizeEventBroadcast{});
 	}
 
 	void Swapchain::Destroy() noexcept
@@ -128,9 +143,9 @@ namespace Yavr
 		if(m_swapchain == VK_NULL_HANDLE)
 			return;
 		vkDeviceWaitIdle(RenderCore::Get().GetDevice().Get());
-		vkDestroySwapchainKHR(RenderCore::Get().GetDevice().Get(), m_swapchain, nullptr);
-		m_swapchain = VK_NULL_HANDLE;
 		for(Image& img : m_images)
 			img.DestroyImageView();
+		vkDestroySwapchainKHR(RenderCore::Get().GetDevice().Get(), m_swapchain, nullptr);
+		m_swapchain = VK_NULL_HANDLE;
 	}
 }

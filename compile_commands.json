@@ -7,12 +7,12 @@
       "-m64",
       "-S",
       "-o",
-      "/tmp/.xmake1000/240307/_79065BAB86B746008EB67D39965E3630",
-      "/tmp/.xmake1000/240307/_F3443E45635A466AA3BEAE9DE99B4339.cpp"
+      "/tmp/.xmake1000/240308/_6297AEF2A83649108049158D9C626450",
+      "/tmp/.xmake1000/240308/_F3443E45635A466AA3BEAE9DE99B4339.cpp"
     ],
     "directory": "/home/kbz_8/Documents/Programmation/42/other/Projets/Compute/YetAnotherVulkanRenderer",
-    "file": "/tmp/.xmake1000/240307/_F3443E45635A466AA3BEAE9DE99B4339.cpp",
-    "output": "/tmp/.xmake1000/240307/_79065BAB86B746008EB67D39965E3630"
+    "file": "/tmp/.xmake1000/240308/_F3443E45635A466AA3BEAE9DE99B4339.cpp",
+    "output": "/tmp/.xmake1000/240308/_6297AEF2A83649108049158D9C626450"
   },
   {
     "arguments": [
@@ -22,12 +22,12 @@
       "-m64",
       "-S",
       "-o",
-      "/tmp/.xmake1000/240307/_219CFD6BD8CB45008B8B2B5492988F30",
-      "/tmp/.xmake1000/240307/_F3443E45635A466AA3BEAE9DE99B4339.cpp"
+      "/tmp/.xmake1000/240308/_59AF40FB886F443080EA16057A4FAC50",
+      "/tmp/.xmake1000/240308/_F3443E45635A466AA3BEAE9DE99B4339.cpp"
     ],
     "directory": "/home/kbz_8/Documents/Programmation/42/other/Projets/Compute/YetAnotherVulkanRenderer",
-    "file": "/tmp/.xmake1000/240307/_F3443E45635A466AA3BEAE9DE99B4339.cpp",
-    "output": "/tmp/.xmake1000/240307/_219CFD6BD8CB45008B8B2B5492988F30"
+    "file": "/tmp/.xmake1000/240308/_F3443E45635A466AA3BEAE9DE99B4339.cpp",
+    "output": "/tmp/.xmake1000/240308/_59AF40FB886F443080EA16057A4FAC50"
   },
   {
     "arguments": [
@@ -37,12 +37,12 @@
       "-m64",
       "-S",
       "-o",
-      "/tmp/.xmake1000/240307/_1C136F6C22F94510886C7431D7437A10",
-      "/tmp/.xmake1000/240307/_F3443E45635A466AA3BEAE9DE99B4339.cpp"
+      "/tmp/.xmake1000/240308/_F060FF8399854A308EDAD1FDD3D68760",
+      "/tmp/.xmake1000/240308/_F3443E45635A466AA3BEAE9DE99B4339.cpp"
     ],
     "directory": "/home/kbz_8/Documents/Programmation/42/other/Projets/Compute/YetAnotherVulkanRenderer",
-    "file": "/tmp/.xmake1000/240307/_F3443E45635A466AA3BEAE9DE99B4339.cpp",
-    "output": "/tmp/.xmake1000/240307/_1C136F6C22F94510886C7431D7437A10"
+    "file": "/tmp/.xmake1000/240308/_F3443E45635A466AA3BEAE9DE99B4339.cpp",
+    "output": "/tmp/.xmake1000/240308/_F060FF8399854A308EDAD1FDD3D68760"
   },
   {
     "arguments": [
@@ -56,6 +56,9 @@
       "-IRuntime/Includes",
       "-DYAVR_DEBUG",
       "-DVK_USE_PLATFORM_XLIB_KHR",
+      "-DVERTEX_SHADER_FILE=\"/home/kbz_8/Documents/Programmation/42/other/Projets/Compute/YetAnotherVulkanRenderer/Shaders/Build/Vertex.spv\"",
+      "-DFRAGMENT_SHADER_FILE=\"/home/kbz_8/Documents/Programmation/42/other/Projets/Compute/YetAnotherVulkanRenderer/Shaders/Build/Fragment.spv\"",
+      "-DFRACTAL_COMPUTE_SHADER_FILE=\"/home/kbz_8/Documents/Programmation/42/other/Projets/Compute/YetAnotherVulkanRenderer/Shaders/Build/FractalCompute.spv\"",
       "-D_REENTRANT",
       "-isystem",
       "/usr/include/SDL2",
