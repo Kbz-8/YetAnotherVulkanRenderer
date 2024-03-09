@@ -14,9 +14,11 @@ namespace Yavr
 
 			void Init(const std::string& title, std::uint32_t width, std::uint32_t height);
 
+			void Update() noexcept;
+
 			inline const std::string& GetTitle() const noexcept { return m_title; }
-			inline std::uint32_t GetWidth() const noexcept { return m_width; } 
-			inline std::uint32_t GetHeight() const noexcept { return m_height; } 
+			inline int GetWidth() const noexcept { return m_width; } 
+			inline int GetHeight() const noexcept { return m_height; } 
 			inline SDL_Window* GetSDLWindow() const noexcept { return m_window; }
 
 			~Window();
@@ -28,8 +30,8 @@ namespace Yavr
 		private:
 			SDL_Window* m_window = nullptr;
 			std::string m_title;
-			std::uint32_t m_height = 0;
-			std::uint32_t m_width = 0;
+			int m_height = 0;
+			int m_width = 0;
 	};
 }
 

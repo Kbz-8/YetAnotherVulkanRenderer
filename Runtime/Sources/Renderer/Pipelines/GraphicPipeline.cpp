@@ -260,6 +260,7 @@ namespace Yavr
 		m_renderpass.Begin(command_buffer, { 0.f, 0.f, 0.f, 0.f }, fb);
 
 		vkCmdBindDescriptorSets(m_renderer->GetActiveCmdBuffer().Get(), GetPipelineBindPoint(), GetPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
+
 		return true;
 	}
 

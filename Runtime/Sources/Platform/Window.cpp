@@ -14,6 +14,11 @@ namespace Yavr
 		Message("New window created");
 	}
 
+	void Window::Update() noexcept
+	{
+		SDL_GetWindowPosition(m_window, &m_width, &m_height);
+	}
+
 	void Window::Destroy() noexcept
 	{
 		if(m_window != nullptr)

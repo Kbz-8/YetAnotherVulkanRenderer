@@ -6,6 +6,7 @@
 #include <Renderer/Renderer.h>
 #include <Platform/Window.h>
 #include <Platform/Inputs.h>
+#include <Core/Camera.h>
 #include <Renderer/Pipelines/GraphicPipeline.h>
 
 namespace Yavr
@@ -24,6 +25,7 @@ namespace Yavr
 
 		private:
 			Renderer m_renderer;
+			Camera m_camera;
 			GraphicPipeline m_graphic_pipeline;
 			Inputs m_inputs;
 			Window m_window;

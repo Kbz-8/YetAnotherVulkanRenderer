@@ -29,8 +29,16 @@ namespace Yavr
 		m_x_rel = 0;
 		m_y_rel = 0;
 
-		std::memset(m_keys.data(), 0, m_keys.size());
-		std::memset(m_mouse.data(), 0, m_mouse.size());
+		for(int i = 0; i < m_keys.size(); i++)
+		{
+			if(m_keys[i] == 1)
+				m_keys[i] = 0;
+		}
+		for(int i = 0; i < m_mouse.size(); i++)
+		{
+			if(m_mouse[i] == 1)
+				m_mouse[i] = 0;
+		}
 
 		while(SDL_PollEvent(&m_event))
 		{

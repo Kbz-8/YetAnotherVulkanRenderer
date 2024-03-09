@@ -26,7 +26,7 @@ namespace Yavr
 		EventBus::Send("Engine", Internal::InterruptEvent{});
 	}
 
-	Engine::Engine()
+	Engine::Engine() : m_camera(0, 0, 0)
 	{
 		std::function<void(const EventBase&)> functor = [this](const EventBase& event)
 		{
@@ -54,9 +54,15 @@ namespace Yavr
 		{
 			m_inputs.Update();
 
+			m_window.Update();
+			m_camera.OnUpdate(static_cast<float>(m_window.GetWidth()) / static_cast<float>(m_window.GetHeight()), m_inputs);
+
 			if(m_renderer.BeginFrame())
 			{
-				m_matrices.model = glm::mat4();
+				m_matrices.model = glm::mat4(1.f);
+				m_matrices.view = m_camera.GetViewMat();
+				m_matrices.projection = m_camera.GetProjectionMat();
+
 				m_graphic_pipeline.SetMatricesData(m_matrices);
 				m_graphic_pipeline.BindPipeline(m_renderer.GetActiveCmdBuffer());
 				m_graphic_pipeline.EndPipeline(m_renderer.GetActiveCmdBuffer());
