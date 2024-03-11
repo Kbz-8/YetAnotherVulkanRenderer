@@ -44,7 +44,6 @@ namespace Yavr
 			DepthImage m_depth;
 			DescriptorPool m_pool;
 			VkPipeline m_pipeline = VK_NULL_HANDLE;
-			VkPipelineCache _cache = VK_NULL_HANDLE;
 			VkPipelineLayout m_pipeline_layout = VK_NULL_HANDLE;
 			VkPipelineBindPoint m_pipeline_bind_point = VK_PIPELINE_BIND_POINT_GRAPHICS;
 			NonOwningPtr<class Renderer> m_renderer;

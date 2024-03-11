@@ -19,6 +19,12 @@ namespace Yavr
 			if(queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT)
 				m_families->graphics_family = i;
 
+			// try to find a queue family index that supports compute but not graphics
+			if(queue_family.queueFlags & VK_QUEUE_COMPUTE_BIT && (queue_family.queueFlags & VK_QUEUE_GRAPHICS_BIT) == 0)
+				m_families->compute_family = i;
+			else if(!m_families->compute_family.has_value() && queue_family.queueFlags & VK_QUEUE_COMPUTE_BIT) // else just find a compute queue
+				m_families->compute_family = i;
+
 			VkBool32 present_support = false;
 			vkGetPhysicalDeviceSurfaceSupportKHR(device, i, surface, &present_support);
 
@@ -51,6 +57,7 @@ namespace Yavr
 		}
 		vkGetDeviceQueue(RenderCore::Get().GetDevice().Get(), m_families->graphics_family.value(), 0, &m_graphics_queue);
 		vkGetDeviceQueue(RenderCore::Get().GetDevice().Get(), m_families->present_family.value(), 0, &m_present_queue);
-		Message("Vulkan : got graphics and present queues");
+		vkGetDeviceQueue(RenderCore::Get().GetDevice().Get(), m_families->compute_family.value(), 0, &m_compute_queue);
+		Message("Vulkan : got graphics, compute and present queues");
 	}
 }

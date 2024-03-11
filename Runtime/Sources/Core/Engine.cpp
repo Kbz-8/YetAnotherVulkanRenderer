@@ -46,6 +46,7 @@ namespace Yavr
 		m_window.Init("Pipelines Pioneer", 1280, 720);
 		m_renderer.Init(&m_window);
 		m_graphic_pipeline.Init(&m_renderer);
+		m_vertex_buffer.Init(3, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 	}
 
 	void Engine::Run()
@@ -63,6 +64,8 @@ namespace Yavr
 				m_matrices.view = m_camera.GetViewMat();
 				m_matrices.projection = m_camera.GetProjectionMat();
 
+				m_vertex_buffer.Bind(m_renderer.GetActiveCmdBuffer());
+
 				m_graphic_pipeline.SetMatricesData(m_matrices);
 				m_graphic_pipeline.BindPipeline(m_renderer.GetActiveCmdBuffer());
 				m_graphic_pipeline.EndPipeline(m_renderer.GetActiveCmdBuffer());
@@ -76,6 +79,7 @@ namespace Yavr
 
 	Engine::~Engine()
 	{
+		m_vertex_buffer.Destroy();
 		m_graphic_pipeline.Destroy();
 		m_renderer.Destroy();
 		m_window.Destroy();

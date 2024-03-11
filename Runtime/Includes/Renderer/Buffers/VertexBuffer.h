@@ -12,7 +12,7 @@ namespace Yavr
 	class VertexBuffer : public GPUBuffer
 	{
 		public:
-			inline void Init(std::uint32_t size) { GPUBuffer::Init(BufferType::LowDynamic, size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, "vertex buffer", {}); }
+			inline void Init(std::uint32_t size, VkBufferUsageFlags additional_flags = 0) { GPUBuffer::Init(BufferType::LowDynamic, size, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | additional_flags, "vertex buffer", {}); }
 			void SetData(CPUBuffer data);
 			inline void Bind(CommandBuffer& cmd) const noexcept { vkCmdBindVertexBuffers(cmd.Get(), 0, 1, &m_buffer, &m_offset); }
 	};

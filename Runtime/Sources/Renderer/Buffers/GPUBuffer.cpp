@@ -34,18 +34,15 @@ namespace Yavr
 
 		CreateBuffer(m_usage, m_flags, name);
 
-		if(type == BufferType::Constant || type == BufferType::HighDynamic || !data.Empty())
+		if(!data.Empty())
 		{
-			if(!data.Empty())
-			{
-				void* mapped = nullptr;
-				MapMem(&mapped);
-					std::memcpy(mapped, data.GetData(), data.GetSize());
-				UnMapMem();
-			}
-			if(type == BufferType::Constant)
-				PushToGPU();
+			void* mapped = nullptr;
+			MapMem(&mapped);
+				std::memcpy(mapped, data.GetData(), data.GetSize());
+			UnMapMem();
 		}
+		if(type == BufferType::Constant || type == BufferType::LowDynamic)
+			PushToGPU();
 	}
 
 	void GPUBuffer::CreateBuffer(VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, const char* name)

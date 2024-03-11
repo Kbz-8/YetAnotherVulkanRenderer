@@ -20,11 +20,13 @@ namespace Yavr
 
 			inline CommandPool& GetCmdPool() noexcept { return m_cmd_pool; }
 			inline CommandBuffer& GetCmdBuffer(int i) noexcept { return m_cmd_buffers[i]; }
+			inline CommandBuffer& GetComputeCmdBuffer() noexcept { return m_compute_cmd_buffer; }
 
 			~CommandManager() = default;
 
 		private:
 			std::array<CommandBuffer, MAX_FRAMES_IN_FLIGHT> m_cmd_buffers;
+			CommandBuffer m_compute_cmd_buffer;
 			CommandPool m_cmd_pool;
 	};
 }
