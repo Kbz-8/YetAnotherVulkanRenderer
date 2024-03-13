@@ -24,10 +24,21 @@ namespace Yavr
 		return m_mouse[button] == 1;
 	}
 
+	bool Inputs::HasMouseWheelScrolledUp() const noexcept
+	{
+		return m_mouse_wheel == 1;
+	}
+
+	bool Inputs::HasMouseWheelScrolledDown() const noexcept
+	{
+		return m_mouse_wheel == 2;
+	}
+
 	void Inputs::Update()
 	{
 		m_x_rel = 0;
 		m_y_rel = 0;
+		m_mouse_wheel = 0;
 
 		for(int i = 0; i < m_keys.size(); i++)
 		{
@@ -57,6 +68,15 @@ namespace Yavr
 				case SDL_KEYUP: m_keys[m_event.key.keysym.scancode] = 1; break;
 				case SDL_MOUSEBUTTONDOWN: m_mouse[m_event.button.button] = 2; break;
 				case SDL_MOUSEBUTTONUP: m_mouse[m_event.button.button] = 1; break;
+
+				case SDL_MOUSEWHEEL:
+				{
+					if(m_event.wheel.y > 0) // scroll up
+						m_mouse_wheel = 1;
+					else if(m_event.wheel.y < 0) // scroll down
+						m_mouse_wheel = 2;
+					break;
+				}
 
 				case SDL_WINDOWEVENT:
 				{

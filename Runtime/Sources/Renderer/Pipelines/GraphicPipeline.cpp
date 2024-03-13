@@ -79,7 +79,7 @@ namespace Yavr
 		m_descriptor_sets_layout.emplace_back().Init({ std::make_pair(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER) }, VK_SHADER_STAGE_VERTEX_BIT);
 
 		VkVertexInputBindingDescription binding_description = Vertex::GetBindingDescription();
-		std::array<VkVertexInputAttributeDescription, 2> attributes_description = Vertex::GetAttributeDescriptions();
+		auto attributes_description = Vertex::GetAttributeDescriptions();
 
 		VkPipelineVertexInputStateCreateInfo vertex_input_state_create_info{};
 		vertex_input_state_create_info.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
@@ -114,7 +114,7 @@ namespace Yavr
 		rasterizer.rasterizerDiscardEnable = VK_FALSE;
 		rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 		rasterizer.lineWidth = 1.f;
-		rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+		rasterizer.cullMode = VK_CULL_MODE_NONE;
 		rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
 		rasterizer.depthBiasEnable = VK_FALSE;
 
@@ -229,7 +229,7 @@ namespace Yavr
 
 		vkCmdBindPipeline(command_buffer.Get(), GetPipelineBindPoint(), GetPipeline());
 
-		m_renderpass.Begin(command_buffer, { 0.f, 0.f, 0.f, 0.f }, fb);
+		m_renderpass.Begin(command_buffer, { 0.2f, 0.3f, 0.3f, 1.0f }, fb);
 
 		vkCmdBindDescriptorSets(m_renderer->GetActiveCmdBuffer().Get(), GetPipelineBindPoint(), GetPipelineLayout(), 0, sets.size(), sets.data(), 0, nullptr);
 

@@ -107,6 +107,7 @@ namespace Yavr
 
 	VkPresentModeKHR Swapchain::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& available_present_modes)
 	{
+		//return VK_PRESENT_MODE_IMMEDIATE_KHR;
 		for(const auto& mode : available_present_modes)
 		{
 			if(mode == VK_PRESENT_MODE_MAILBOX_KHR)

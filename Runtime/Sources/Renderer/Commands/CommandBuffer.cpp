@@ -196,7 +196,7 @@ namespace Yavr
 		m_state = CommandBufferState::Idle;
 	}
 
-	void CommandBuffer::SubmitIdle(bool should_wait_for_execution) noexcept
+	void CommandBuffer::SubmitIdle(CommandBufferSubmit info, bool should_wait_for_execution) noexcept
 	{
 		if(m_type != CommandBufferType::SingleTime)
 		{
@@ -211,7 +211,16 @@ namespace Yavr
 		submit_info.commandBufferCount = 1;
 		submit_info.pCommandBuffers = &m_cmd_buffer;
 
-		VkResult res = vkQueueSubmit(RenderCore::Get().GetQueue().GetGraphic(), 1, &submit_info, m_fence.Get());
+		VkQueue queue;
+		switch(info)
+		{
+			case CommandBufferSubmit::Compute: queue = RenderCore::Get().GetQueue().GetCompute(); break;
+			case CommandBufferSubmit::Graphics: queue = RenderCore::Get().GetQueue().GetGraphic(); break;
+
+			default: break;
+		}
+
+		VkResult res = vkQueueSubmit(queue, 1, &submit_info, m_fence.Get());
 		if(res != VK_SUCCESS)
 			FatalError("Vulkan error : failed to submit a single time command buffer, %", VerbaliseVkResult(res));
 		m_state = CommandBufferState::Submitted;
@@ -219,36 +228,38 @@ namespace Yavr
 			WaitForExecution();
 	}
 
-	void CommandBuffer::Submit(NonOwningPtr<Semaphore> semaphores) noexcept
+	void CommandBuffer::Submit(CommandBufferSubmit info, NonOwningPtr<class Semaphore> signal, NonOwningPtr<class Semaphore> wait) noexcept
 	{
 		std::array<VkSemaphore, 1> signal_semaphores;
 		std::array<VkSemaphore, 1> wait_semaphores;
 
-		if(semaphores)
-		{
-			signal_semaphores[0] = semaphores->GetRenderImageSemaphore();
-			wait_semaphores[0] = semaphores->GetImageSemaphore();
-		}
-		else
-		{
-			signal_semaphores[0] = VK_NULL_HANDLE;
-			wait_semaphores[0] = VK_NULL_HANDLE;
-		}
+		signal_semaphores[0] = (signal ? signal->Get() : VK_NULL_HANDLE);
+
+		wait_semaphores[0] = (wait ? wait->Get() : VK_NULL_HANDLE);
 		VkPipelineStageFlags wait_stages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
 		m_fence.Reset();
 
 		VkSubmitInfo submit_info{};
 		submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-		submit_info.waitSemaphoreCount = (!semaphores ? 0 : wait_semaphores.size());
+		submit_info.waitSemaphoreCount = (!wait ? 0 : wait_semaphores.size());
 		submit_info.pWaitSemaphores = wait_semaphores.data();
 		submit_info.pWaitDstStageMask = wait_stages;
 		submit_info.commandBufferCount = 1;
 		submit_info.pCommandBuffers = &m_cmd_buffer;
-		submit_info.signalSemaphoreCount = (!semaphores ? 0 : signal_semaphores.size());
+		submit_info.signalSemaphoreCount = (!signal ? 0 : signal_semaphores.size());
 		submit_info.pSignalSemaphores = signal_semaphores.data();
 
-		VkResult res = vkQueueSubmit(RenderCore::Get().GetQueue().GetGraphic(), 1, &submit_info, m_fence.Get());
+		VkQueue queue;
+		switch(info)
+		{
+			case CommandBufferSubmit::Compute: queue = RenderCore::Get().GetQueue().GetCompute(); break;
+			case CommandBufferSubmit::Graphics: queue = RenderCore::Get().GetQueue().GetGraphic(); break;
+
+			default: break;
+		}
+
+		VkResult res = vkQueueSubmit(queue, 1, &submit_info, m_fence.Get());
 		if(res != VK_SUCCESS)
 			FatalError("Vulkan error : failed to submit draw command buffer, %", VerbaliseVkResult(res));
 		m_state = CommandBufferState::Submitted;

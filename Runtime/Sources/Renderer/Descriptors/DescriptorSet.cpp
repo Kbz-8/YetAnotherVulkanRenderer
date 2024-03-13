@@ -29,6 +29,27 @@ namespace Yavr
 		Message("Vulkan : descriptor set created");
 	}
 
+	void DescriptorSet::WriteDescriptor(int binding, const GPUBuffer& buffer) noexcept
+	{
+		auto device = RenderCore::Get().GetDevice().Get();
+
+		VkDescriptorBufferInfo buffer_info{};
+		buffer_info.buffer = buffer.Get();
+		buffer_info.offset = buffer.GetOffset();
+		buffer_info.range = buffer.GetSize();
+
+		VkWriteDescriptorSet descriptor_write{};
+		descriptor_write.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+		descriptor_write.dstSet = m_desc_set[m_renderer->GetActiveImageIndex()];
+		descriptor_write.dstBinding = binding;
+		descriptor_write.dstArrayElement = 0;
+		descriptor_write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+		descriptor_write.descriptorCount = 1;
+		descriptor_write.pBufferInfo = &buffer_info;
+
+		vkUpdateDescriptorSets(device, 1, &descriptor_write, 0, nullptr);
+	}
+
 	void DescriptorSet::WriteDescriptor(int binding, const UniformBuffer& ubo) noexcept
 	{
 		auto device = RenderCore::Get().GetDevice().Get();
@@ -51,7 +72,7 @@ namespace Yavr
 
 			vkUpdateDescriptorSets(device, 1, &descriptor_write, 0, nullptr);
 		}
-    }
+	}
 
 	void DescriptorSet::WriteDescriptor(int binding, VkImageView view, VkSampler sampler) noexcept
 	{

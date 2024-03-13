@@ -16,6 +16,8 @@ namespace Yavr
 			bool IsKeyReleased(const std::uint32_t button) const noexcept;
 			bool IsMouseButtonPressed(const std::uint8_t button) const noexcept;
 			bool IsMouseButtonReleased(const std::uint8_t button) const noexcept;
+			bool HasMouseWheelScrolledUp() const noexcept;
+			bool HasMouseWheelScrolledDown() const noexcept;
 			inline std::int32_t GetX() const noexcept { return m_x; }
 			inline std::int32_t GetY() const noexcept { return m_y; }
 			inline std::int32_t GetXRel() const noexcept { return m_x_rel; }
@@ -36,6 +38,7 @@ namespace Yavr
 			std::int32_t m_y = 0;
 			std::int32_t m_x_rel = 0;
 			std::int32_t m_y_rel = 0;
+			std::uint8_t m_mouse_wheel = 0;
 			bool m_has_recieved_close_event = false;
 	};
 }

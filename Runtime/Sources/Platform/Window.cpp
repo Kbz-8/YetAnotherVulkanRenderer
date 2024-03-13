@@ -16,7 +16,7 @@ namespace Yavr
 
 	void Window::Update() noexcept
 	{
-		SDL_GetWindowPosition(m_window, &m_width, &m_height);
+		SDL_GetWindowSize(m_window, &m_width, &m_height);
 	}
 
 	void Window::Destroy() noexcept

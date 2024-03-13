@@ -14,6 +14,7 @@ namespace Yavr
 
 			void Init(NonOwningPtr<class Renderer> renderer, NonOwningPtr<class DescriptorSetLayout> layout, NonOwningPtr<class DescriptorPool> pool);
 
+			void WriteDescriptor(int binding, const class GPUBuffer& buffer) noexcept;
 			void WriteDescriptor(int binding, const class UniformBuffer& ubo) noexcept;
 			void WriteDescriptor(int binding, VkImageView view, VkSampler sampler) noexcept;
 

@@ -19,7 +19,10 @@ namespace Yavr
 		m_cmd.Init();
 
 		for(std::size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-			m_semaphores[i].Init();
+		{
+			m_render_finished_semaphores[i].Init();
+			m_image_available_semaphores[i].Init();
+		}
 
 		m_framebuffers_resize = false;
 	}
@@ -29,7 +32,7 @@ namespace Yavr
 		auto device = RenderCore::Get().GetDevice().Get();
 
 		m_cmd.GetCmdBuffer(m_current_frame_index).WaitForExecution();
-		VkResult result = vkAcquireNextImageKHR(device, m_swapchain.Get(), UINT64_MAX, m_semaphores[m_current_frame_index].GetImageSemaphore(), VK_NULL_HANDLE, &m_swapchain_image_index);
+		VkResult result = vkAcquireNextImageKHR(device, m_swapchain.Get(), UINT64_MAX, m_image_available_semaphores[m_current_frame_index].Get(), VK_NULL_HANDLE, &m_swapchain_image_index);
 		if(result == VK_ERROR_OUT_OF_DATE_KHR)
 		{
 			m_swapchain.Recreate();
@@ -50,10 +53,10 @@ namespace Yavr
 		m_framebuffers_resize = false;
 		m_is_rendering = false;
 		m_cmd.GetCmdBuffer(m_current_frame_index).EndRecord();
-		m_cmd.GetCmdBuffer(m_current_frame_index).Submit(&m_semaphores[m_current_frame_index]);
+		m_cmd.GetCmdBuffer(m_current_frame_index).Submit(CommandBufferSubmit::Graphics, &m_render_finished_semaphores[m_current_frame_index], &m_image_available_semaphores[m_current_frame_index]);
 
 		VkSwapchainKHR swapchain = m_swapchain.Get();
-		VkSemaphore signal_semaphores[] = { m_semaphores[m_current_frame_index].GetRenderImageSemaphore() };
+		VkSemaphore signal_semaphores[] = { m_render_finished_semaphores[m_current_frame_index].Get() };
 
 		VkPresentInfoKHR present_info{};
 		present_info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -81,6 +84,9 @@ namespace Yavr
 		m_swapchain.Destroy();
 		m_surface.Destroy();
 		for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
-			m_semaphores[i].Destroy();
+		{
+			m_render_finished_semaphores[i].Destroy();
+			m_image_available_semaphores[i].Destroy();
+		}
 	}
 }

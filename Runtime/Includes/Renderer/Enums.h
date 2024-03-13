@@ -37,6 +37,15 @@ namespace Yavr
 	};
 	constexpr std::size_t CommandBufferStateCount = static_cast<std::size_t>(CommandBufferState::EndEnum) + 1;
 
+	enum class CommandBufferSubmit
+	{
+		Graphics = 0,
+		Compute,
+
+		EndEnum
+	};
+	constexpr std::size_t CommandBufferSubmitCount = static_cast<std::size_t>(CommandBufferSubmit::EndEnum) + 1;
+
 	enum class ImageType
 	{
 		Color = 0,

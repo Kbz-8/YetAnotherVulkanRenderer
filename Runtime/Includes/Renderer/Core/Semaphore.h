@@ -13,14 +13,12 @@ namespace Yavr
 			void Init();
 			void Destroy() noexcept;
 
-			inline VkSemaphore& GetImageSemaphore() noexcept { return m_image_available_semaphores; }
-			inline VkSemaphore& GetRenderImageSemaphore() noexcept { return m_render_finished_semaphores; }
+			inline VkSemaphore& Get() noexcept { return m_semaphore; }
 
 			~Semaphore() = default;
 
 		private:
-			VkSemaphore m_image_available_semaphores = VK_NULL_HANDLE;
-			VkSemaphore m_render_finished_semaphores = VK_NULL_HANDLE;
+			VkSemaphore m_semaphore = VK_NULL_HANDLE;
 	};
 }
 

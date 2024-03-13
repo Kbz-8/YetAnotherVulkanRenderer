@@ -21,8 +21,8 @@ namespace Yavr
 			void Destroy() noexcept;
 
 			void BeginRecord(VkCommandBufferUsageFlags usage = 0);
-			void Submit(NonOwningPtr<class Semaphore> semaphores) noexcept;
-			void SubmitIdle(bool should_wait_for_execution = true) noexcept;
+			void Submit(CommandBufferSubmit info, NonOwningPtr<class Semaphore> signal, NonOwningPtr<class Semaphore> wait) noexcept;
+			void SubmitIdle(CommandBufferSubmit info = CommandBufferSubmit::Graphics, bool should_wait_for_execution = true) noexcept;
 			void UpdateSubmitState() noexcept;
 			inline void WaitForExecution() noexcept { m_fence.Wait(); UpdateSubmitState(); m_state = CommandBufferState::Ready; }
 			inline void Reset() noexcept { vkResetCommandBuffer(m_cmd_buffer, 0); }

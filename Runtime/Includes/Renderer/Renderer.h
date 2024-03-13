@@ -34,9 +34,9 @@ namespace Yavr
 			inline Surface& GetSurface() noexcept { return m_surface; }
 			inline CommandPool& GetCmdPool() noexcept { return m_cmd.GetCmdPool(); }
 			inline Swapchain& GetSwapchain() noexcept { return m_swapchain; }
-			inline Semaphore& GetSemaphore(int i) noexcept { return m_semaphores[i]; }
 			inline CommandBuffer& GetCmdBuffer(int i) noexcept { return m_cmd.GetCmdBuffer(i); }
 			inline CommandBuffer& GetActiveCmdBuffer() noexcept { return m_cmd.GetCmdBuffer(m_current_frame_index); }
+			inline CommandBuffer& GetComputeCmdBuffer() noexcept { return m_cmd.GetComputeCmdBuffer(); }
 			inline std::uint32_t GetActiveImageIndex() noexcept { return m_current_frame_index; }
 			inline std::uint32_t GetSwapchainImageIndex() noexcept { return m_swapchain_image_index; }
 
@@ -50,7 +50,8 @@ namespace Yavr
 			CommandManager m_cmd;
 			Surface m_surface;
 			Swapchain m_swapchain;
-			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> m_semaphores;
+			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> m_render_finished_semaphores;
+			std::array<Semaphore, MAX_FRAMES_IN_FLIGHT> m_image_available_semaphores;
 
 			NonOwningPtr<class Window> m_window = nullptr;
 

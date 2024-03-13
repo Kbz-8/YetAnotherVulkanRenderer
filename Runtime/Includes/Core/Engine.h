@@ -9,6 +9,7 @@
 #include <Core/Camera.h>
 #include <Renderer/Buffers/VertexBuffer.h>
 #include <Renderer/Pipelines/GraphicPipeline.h>
+#include <Renderer/Pipelines/ComputePipeline.h>
 
 namespace Yavr
 {
@@ -28,8 +29,10 @@ namespace Yavr
 			Renderer m_renderer;
 			Camera m_camera;
 			GraphicPipeline m_graphic_pipeline;
+			ComputePipeline m_compute_pipeline;
 			Inputs m_inputs;
 			VertexBuffer m_vertex_buffer;
+			VertexBuffer m_vertex_buffer_cube;
 			Window m_window;
 			MatricesData m_matrices;
 			bool m_running = true;

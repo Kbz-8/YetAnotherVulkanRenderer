@@ -7,10 +7,10 @@ namespace Yavr
 {
 	struct Vertex
 	{
-		glm::vec3 position;
-		glm::vec4 color;
+		alignas(16) glm::vec4 position;
+		alignas(16) glm::vec4 normal;
 
-		Vertex(glm::vec3 _pos, glm::vec4 _color) : position(std::move(_pos)), color(std::move(_color)) {}
+		Vertex(glm::vec4 pos, glm::vec4 norm) : position(std::move(pos)), normal(std::move(norm)) {}
 
 		inline static VkVertexInputBindingDescription GetBindingDescription();
 		inline static std::array<VkVertexInputAttributeDescription, 2> GetAttributeDescriptions();
