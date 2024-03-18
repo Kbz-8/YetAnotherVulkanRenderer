@@ -15,6 +15,11 @@ namespace Yavr
 		{
 			std::uint32_t What() const override { return 168; }
 		};
+
+		struct UBOComputeGenerator
+		{
+			std::uint32_t iterations;
+		};
 	}
 
 	void FatalErrorEventHandle()
@@ -48,8 +53,6 @@ namespace Yavr
 		m_renderer.Init(&m_window);
 		m_graphic_pipeline.Init(&m_renderer);
 		m_compute_pipeline.Init(&m_renderer);
-
-		m_vertex_buffer.Init(3 * 27 * 36 * sizeof(Vertex), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 
 		CPUBuffer vertices(36 * sizeof(Vertex));
 
@@ -101,6 +104,9 @@ namespace Yavr
 		m_vertex_buffer_cube.Init(vertices.GetSize());
 		m_vertex_buffer_cube.SetData(vertices);
 
+		m_ubo_compute_generator.Init(&m_renderer, sizeof(Internal::UBOComputeGenerator));
+		m_compute_pipeline.GetSet(0).WriteDescriptor(1, m_ubo_compute_generator);
+
 		m_matrices.model = glm::mat4(1.0f);
 	}
 
@@ -115,14 +121,27 @@ namespace Yavr
 
 			if(m_renderer.BeginFrame())
 			{
-				if(m_inputs.HasMouseWheelScrolledDown() || m_inputs.HasMouseWheelScrolledUp())
+				if(m_inputs.IsKeyPressed(SDL_SCANCODE_UP) || m_inputs.IsKeyPressed(SDL_SCANCODE_DOWN) ||
+					m_inputs.HasMouseWheelScrolledDown() || m_inputs.HasMouseWheelScrolledUp())
 				{
 					vkQueueWaitIdle(RenderCore::Get().GetQueue().GetGraphic()); // waiting for the vertex buffer to be idle
+
+					if(m_inputs.IsKeyPressed(SDL_SCANCODE_UP) || m_inputs.HasMouseWheelScrolledUp())
+						m_iterations++;
+					else if(m_inputs.IsKeyPressed(SDL_SCANCODE_DOWN) || m_inputs.HasMouseWheelScrolledDown())
+						m_iterations--;
+
+					CPUBuffer buffer(sizeof(Internal::UBOComputeGenerator));
+					std::memcpy(buffer.GetData(), &m_iterations, buffer.GetSize());
+					m_ubo_compute_generator.SetData(std::move(buffer));
+
+					m_vertex_buffer.Destroy();
+					m_vertex_buffer.Init(m_iterations * 20 * 36 * sizeof(Vertex), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+					m_compute_pipeline.GetSet(0).WriteDescriptor(0, m_vertex_buffer);
+
 					auto cmd_buffer = m_renderer.GetComputeCmdBuffer();
 					cmd_buffer.Reset();
 					cmd_buffer.BeginRecord();
-
-					m_compute_pipeline.GetSet(0).WriteDescriptor(0, m_vertex_buffer);
 
 					m_compute_pipeline.BindPipeline(cmd_buffer);
 					vkCmdDispatch(cmd_buffer.Get(), m_vertex_buffer.GetSize() / 64, 1, 1);
@@ -132,7 +151,7 @@ namespace Yavr
 					cmd_buffer.WaitForExecution();
 				}
 
-				//m_matrices.model = glm::rotate(m_matrices.model, glm::radians(2.0f), glm::vec3(1.0f, 0.3f, 0.5f));;
+				//m_matrices.model = glm::rotate(m_matrices.model, glm::radians(2.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 				m_matrices.normal = glm::transpose(glm::inverse(m_matrices.model));
 				m_matrices.view = m_camera.GetViewMat();
 				m_matrices.projection = m_camera.GetProjectionMat();
@@ -159,6 +178,7 @@ namespace Yavr
 	Engine::~Engine()
 	{
 		vkDeviceWaitIdle(RenderCore::Get().GetDevice().Get());
+		m_ubo_compute_generator.Destroy();
 		m_vertex_buffer_cube.Destroy();
 		m_vertex_buffer.Destroy();
 		m_compute_pipeline.Destroy();

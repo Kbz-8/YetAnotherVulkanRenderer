@@ -118,6 +118,8 @@ namespace Yavr
 
 	void GPUBuffer::Destroy() noexcept
 	{
+		if(m_buffer == VK_NULL_HANDLE)
+			return;
 		vkDestroyBuffer(RenderCore::Get().GetDevice().Get(), m_buffer, nullptr);
 		vkFreeMemory(RenderCore::Get().GetDevice().Get(), m_memory, nullptr);
 		m_buffer = VK_NULL_HANDLE;

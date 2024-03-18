@@ -18,7 +18,10 @@ namespace Yavr
 		shader_stage_info.module = shader_module;
 		shader_stage_info.pName = "main";
 
-		m_descriptor_sets_layout.emplace_back().Init({ std::make_pair(0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER) }, VK_SHADER_STAGE_COMPUTE_BIT);
+		m_descriptor_sets_layout.emplace_back().Init({
+			std::make_pair(0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER),
+			std::make_pair(1, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER)
+		}, VK_SHADER_STAGE_COMPUTE_BIT);
 
 		std::vector<VkDescriptorSetLayout> vk_descriptor_layouts;
 		for(auto& layout : m_descriptor_sets_layout)
@@ -44,7 +47,8 @@ namespace Yavr
 		vkDestroyShaderModule(device, shader_module, nullptr);
 
 		VkDescriptorPoolSize pool_sizes[] = {
-			{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 512 }
+			{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 512 },
+			{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 512 }
 		};
 		m_pool.Init((sizeof(pool_sizes) / sizeof(VkDescriptorPoolSize)), pool_sizes);
 		m_descriptor_sets.emplace_back().Init(m_renderer, &m_descriptor_sets_layout[0], &m_pool);

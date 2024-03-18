@@ -20,6 +20,7 @@ namespace Yavr
 
 	void Camera::OnUpdate(float aspect, const Inputs& in)
 	{
+		m_speed = 0.02f;
 		if(m_is_mouse_grabed)
 		{
 			m_theta -= in.GetXRel() * m_sensivity;
@@ -50,6 +51,9 @@ namespace Yavr
 			m_mov -= m_up;
 		if(in.IsKeyPressed(SDL_SCANCODE_SPACE))
 			m_mov += m_up;
+
+		if(in.IsKeyPressed(SDL_SCANCODE_Q))
+			m_speed = 0.5f;
 
 		m_position += m_mov * m_speed;
 

@@ -2,17 +2,23 @@
 module;
 
 const workgroup_size = vec3[u32](u32(64), u32(1), u32(1));
-const iterations = 3;
 
 [layout(std430)]
 struct SSBO
 {
-	vertices: dyn_array[vec4[f32]]
+	vertices : dyn_array[vec4[f32]]
+}
+
+[layout(std140)]
+struct UBO
+{
+	iterations : u32
 }
 
 external
 {
-	[set(0), binding(0)] ssbo: storage[SSBO]
+	[set(0), binding(0)] ssbo : storage[SSBO],
+	[set(0), binding(1)] ubo : uniform[UBO],
 }
 
 struct Input
@@ -82,7 +88,7 @@ fn main(input : Input)
 	let global_index : u32 = input.indices.x + input.indices.y * workgroup_size.x + input.indices.z * workgroup_size.x * workgroup_size.y;
 	let cube_pos : vec4[f32] = vec4[f32](vec3[f32](input.indices) / vec3[f32](workgroup_size), 1.0);
 
-	for i in 0 -> iterations
+	for i in 0 -> i32(ubo.iterations)
 	{
 		// Subdivide the cube into 27 smaller cubes
 		for x in 0 -> 3
@@ -91,12 +97,12 @@ fn main(input : Input)
 			{
 				for z in 0 -> 3
 				{
-					let sub_cube_pos : vec4[f32] = cube_pos + vec4[f32](f32(x), f32(y), f32(z), 1.0) / 3.0;
+					let sub_cube_pos : vec4[f32] = cube_pos + vec4[f32](f32(x), f32(y), f32(z), 1.0);
 
 					// Check if this subcube is not the center cube or one of the six cubes that share a face with the center
-					//if(!(x == 1 && y == 1 && z == 1) && !(x == 0 && y == 1 && z == 1) && !(x == 2 && y == 1 && z == 1) &&
-					//	!(x == 1 && y == 0 && z == 1) && !(x == 1 && y == 2 && z == 1) && !(x == 1 && y == 1 && z == 0) &&
-					//	!(x == 1 && y == 1 && z == 2))
+					if(!(x == 1 && y == 1 && z == 1) && !(x == 0 && y == 1 && z == 1) && !(x == 2 && y == 1 && z == 1) &&
+						!(x == 1 && y == 0 && z == 1) && !(x == 1 && y == 2 && z == 1) && !(x == 1 && y == 1 && z == 0) &&
+						!(x == 1 && y == 1 && z == 2))
 					{
 						global_index = AddCube(global_index, sub_cube_pos);
 					}

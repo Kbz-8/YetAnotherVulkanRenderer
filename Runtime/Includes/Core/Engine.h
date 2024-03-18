@@ -10,6 +10,7 @@
 #include <Renderer/Buffers/VertexBuffer.h>
 #include <Renderer/Pipelines/GraphicPipeline.h>
 #include <Renderer/Pipelines/ComputePipeline.h>
+#include <Renderer/Buffers/UniformBuffer.h>
 
 namespace Yavr
 {
@@ -31,10 +32,12 @@ namespace Yavr
 			GraphicPipeline m_graphic_pipeline;
 			ComputePipeline m_compute_pipeline;
 			Inputs m_inputs;
+			UniformBuffer m_ubo_compute_generator;
 			VertexBuffer m_vertex_buffer;
 			VertexBuffer m_vertex_buffer_cube;
 			Window m_window;
 			MatricesData m_matrices;
+			std::uint32_t m_iterations = 3;
 			bool m_running = true;
 	};
 }
