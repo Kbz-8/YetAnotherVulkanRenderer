@@ -28,48 +28,50 @@ struct Input
 
 fn AddCube(global_index : u32, cube_pos : vec4[f32]) -> u32
 {
+	const scale : f32 = 0.5;
+
 	let vertices = array[vec4[f32], 36 * 2](
-		cube_pos + vec4[f32](-0.5, -0.5, -0.5, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5, -0.5, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5, -0.5, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5, -0.5, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
-		cube_pos + vec4[f32](-0.5,  0.5, -0.5, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5, -0.5, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale, -scale, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale, -scale, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale, -scale, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale, -scale, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale, -scale, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale, -scale, 1.0), vec4[f32](0.0, 0.0, -1.0, 1.0),
 
-		cube_pos + vec4[f32](-0.5, -0.5,  0.5, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5,  0.5, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5,  0.5, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5,  0.5, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
-		cube_pos + vec4[f32](-0.5,  0.5,  0.5, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5,  0.5, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale,  scale, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale,  scale, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale,  scale, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale,  scale, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale,  scale, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale,  scale, 1.0), vec4[f32](0.0, 0.0,  1.0, 1.0),
 
-		cube_pos + vec4[f32](-0.5,  0.5,  0.5, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5,  0.5, -0.5, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5, -0.5, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5, -0.5, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5,  0.5, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5,  0.5,  0.5, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale,  scale, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale, -scale, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale, -scale, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale, -scale, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale,  scale, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale,  scale, 1.0), vec4[f32](-1.0, 0.0, 0.0, 1.0),
 
-		cube_pos + vec4[f32]( 0.5,  0.5,  0.5, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5, -0.5, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5, -0.5, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5, -0.5, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5,  0.5, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5,  0.5, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale,  scale, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale, -scale, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale, -scale, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale, -scale, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale,  scale, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale,  scale, 1.0), vec4[f32]( 1.0, 0.0, 0.0, 1.0),
 
-		cube_pos + vec4[f32](-0.5, -0.5, -0.5, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5, -0.5, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5,  0.5, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5, -0.5,  0.5, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5,  0.5, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5, -0.5, -0.5, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale, -scale, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale, -scale, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale,  scale, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale, -scale,  scale, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale,  scale, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale, -scale, -scale, 1.0), vec4[f32](0.0, -1.0, 0.0, 1.0),
 
-		cube_pos + vec4[f32](-0.5,  0.5, -0.5, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5, -0.5, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5,  0.5, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
-		cube_pos + vec4[f32]( 0.5,  0.5,  0.5, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5,  0.5,  0.5, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
-		cube_pos + vec4[f32](-0.5,  0.5, -0.5, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0)
+		cube_pos + vec4[f32](-scale,  scale, -scale, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale, -scale, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale,  scale, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
+		cube_pos + vec4[f32]( scale,  scale,  scale, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale,  scale, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0),
+		cube_pos + vec4[f32](-scale,  scale, -scale, 1.0), vec4[f32](0.0,  1.0, 0.0, 1.0)
 	);
 
 	[unroll]
@@ -86,7 +88,7 @@ fn AddCube(global_index : u32, cube_pos : vec4[f32]) -> u32
 fn main(input : Input)
 {
 	let global_index : u32 = input.indices.x + input.indices.y * workgroup_size.x + input.indices.z * workgroup_size.x * workgroup_size.y;
-	let cube_pos : vec4[f32] = vec4[f32](vec3[f32](input.indices) / vec3[f32](workgroup_size), 1.0);
+	let cube_pos : vec4[f32] = vec4[f32](vec3[f32](input.indices) / vec3[f32](4.0, 4.0, 4.0), 1.0);
 
 	for i in 0 -> i32(ubo.iterations)
 	{

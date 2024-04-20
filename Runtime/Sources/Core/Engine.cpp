@@ -1,4 +1,3 @@
-#include "Utils/NonOwningPtr.h"
 #include <PreCompiled.h>
 #include <Core/Engine.h>
 #include <SDL2/SDL.h>
@@ -54,56 +53,6 @@ namespace Yavr
 		m_graphic_pipeline.Init(&m_renderer);
 		m_compute_pipeline.Init(&m_renderer);
 
-		CPUBuffer vertices(36 * sizeof(Vertex));
-
-		Vertex vertices_data[] = {
-			{ glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) },
-			{ glm::vec4(-0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(0.0f, 0.0f, -1.0f, 1.0f) },
-
-			{ glm::vec4(-0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(0.0f, 0.0f,  1.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(0.0f, 0.0f,  1.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(0.0f, 0.0f,  1.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(0.0f, 0.0f,  1.0f, 1.0f) },
-			{ glm::vec4(-0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(0.0f, 0.0f,  1.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(0.0f, 0.0f,  1.0f, 1.0f) },
-
-			{ glm::vec4(-0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(-1.0f, 0.0f, 0.0f, 1.0f) },
-
-			{ glm::vec4( 0.5f,  0.5f,  0.5f, 1.0f), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f, -0.5f, 1.0f), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f, -0.5f, 1.0f), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f, -0.5f, 1.0f), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f,  0.5f, 1.0f), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f,  0.5f, 1.0f), glm::vec4( 1.0f, 0.0f, 0.0f, 1.0f) },
-
-			{ glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(0.0f, -1.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(0.0f, -1.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(0.0f, -1.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(0.0f, -1.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f,  0.5f, 1.0f), glm::vec4(0.0f, -1.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f, -0.5f, -0.5f, 1.0f), glm::vec4(0.0f, -1.0f, 0.0f, 1.0f) },
-
-			{ glm::vec4(-0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(0.0f,  1.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(0.0f,  1.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(0.0f,  1.0f, 0.0f, 1.0f) },
-			{ glm::vec4( 0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(0.0f,  1.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f,  0.5f,  0.5f, 1.0f), glm::vec4(0.0f,  1.0f, 0.0f, 1.0f) },
-			{ glm::vec4(-0.5f,  0.5f, -0.5f, 1.0f), glm::vec4(0.0f,  1.0f, 0.0f, 1.0f) },
-		};
-
-		std::memcpy(vertices.GetData(), vertices_data, vertices.GetSize());
-		m_vertex_buffer_cube.Init(vertices.GetSize());
-		m_vertex_buffer_cube.SetData(vertices);
-
 		m_ubo_compute_generator.Init(&m_renderer, sizeof(Internal::UBOComputeGenerator));
 		m_compute_pipeline.GetSet(0).WriteDescriptor(1, m_ubo_compute_generator);
 
@@ -112,6 +61,8 @@ namespace Yavr
 
 	void Engine::Run()
 	{
+		static bool first_run = true;
+
 		while(m_running)
 		{
 			m_inputs.Update();
@@ -119,39 +70,46 @@ namespace Yavr
 			m_window.Update();
 			m_camera.OnUpdate(static_cast<float>(m_window.GetWidth()) / static_cast<float>(m_window.GetHeight()), m_inputs);
 
+			if(first_run || (m_inputs.IsKeyPressed(SDL_SCANCODE_UP) || m_inputs.IsKeyPressed(SDL_SCANCODE_DOWN) ||
+				m_inputs.HasMouseWheelScrolledDown() || m_inputs.HasMouseWheelScrolledUp()))
+			{
+				for(int i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) // waiting for the vertex buffer to be idle
+					m_renderer.GetCmdBuffer(i).WaitForExecution();
+
+				if(m_inputs.IsKeyPressed(SDL_SCANCODE_UP) || m_inputs.HasMouseWheelScrolledUp())
+					m_iterations++;
+				else if(m_inputs.IsKeyPressed(SDL_SCANCODE_DOWN) || m_inputs.HasMouseWheelScrolledDown())
+					m_iterations--;
+
+				if(m_iterations < 1)
+					m_iterations = 1;
+				else if(m_iterations > 64)
+					m_iterations = 64;
+
+				std::cout << "iterations : " << m_iterations << std::endl;
+
+				CPUBuffer buffer(sizeof(Internal::UBOComputeGenerator));
+				std::memcpy(buffer.GetData(), &m_iterations, buffer.GetSize());
+				m_ubo_compute_generator.SetData(std::move(buffer));
+
+				m_vertex_buffer.Destroy();
+				m_vertex_buffer.Init(m_iterations * 20 * 36 * sizeof(Vertex), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+				m_compute_pipeline.GetSet(0).WriteDescriptor(0, m_vertex_buffer);
+
+				auto cmd_buffer = m_renderer.GetComputeCmdBuffer();
+				cmd_buffer.Reset();
+				cmd_buffer.BeginRecord();
+
+				m_compute_pipeline.BindPipeline(cmd_buffer);
+				vkCmdDispatch(cmd_buffer.Get(), m_vertex_buffer.GetSize() / 64, 1, 1);
+
+				cmd_buffer.EndRecord();
+				cmd_buffer.Submit(CommandBufferSubmit::Compute, nullptr, nullptr);
+				cmd_buffer.WaitForExecution();
+			}
+
 			if(m_renderer.BeginFrame())
 			{
-				if(m_inputs.IsKeyPressed(SDL_SCANCODE_UP) || m_inputs.IsKeyPressed(SDL_SCANCODE_DOWN) ||
-					m_inputs.HasMouseWheelScrolledDown() || m_inputs.HasMouseWheelScrolledUp())
-				{
-					vkQueueWaitIdle(RenderCore::Get().GetQueue().GetGraphic()); // waiting for the vertex buffer to be idle
-
-					if(m_inputs.IsKeyPressed(SDL_SCANCODE_UP) || m_inputs.HasMouseWheelScrolledUp())
-						m_iterations++;
-					else if(m_inputs.IsKeyPressed(SDL_SCANCODE_DOWN) || m_inputs.HasMouseWheelScrolledDown())
-						m_iterations--;
-
-					CPUBuffer buffer(sizeof(Internal::UBOComputeGenerator));
-					std::memcpy(buffer.GetData(), &m_iterations, buffer.GetSize());
-					m_ubo_compute_generator.SetData(std::move(buffer));
-
-					m_vertex_buffer.Destroy();
-					m_vertex_buffer.Init(m_iterations * 20 * 36 * sizeof(Vertex), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-					m_compute_pipeline.GetSet(0).WriteDescriptor(0, m_vertex_buffer);
-
-					auto cmd_buffer = m_renderer.GetComputeCmdBuffer();
-					cmd_buffer.Reset();
-					cmd_buffer.BeginRecord();
-
-					m_compute_pipeline.BindPipeline(cmd_buffer);
-					vkCmdDispatch(cmd_buffer.Get(), m_vertex_buffer.GetSize() / 64, 1, 1);
-
-					cmd_buffer.EndRecord();
-					cmd_buffer.Submit(CommandBufferSubmit::Compute, nullptr, nullptr);
-					cmd_buffer.WaitForExecution();
-				}
-
-				//m_matrices.model = glm::rotate(m_matrices.model, glm::radians(2.0f), glm::vec3(1.0f, 0.3f, 0.5f));
 				m_matrices.normal = glm::transpose(glm::inverse(m_matrices.model));
 				m_matrices.view = m_camera.GetViewMat();
 				m_matrices.projection = m_camera.GetProjectionMat();
@@ -161,10 +119,11 @@ namespace Yavr
 				m_graphic_pipeline.SetMatricesData(m_matrices);
 				m_graphic_pipeline.BindPipeline(render_cmd_buffer);
 
-				//m_vertex_buffer_cube.Bind(render_cmd_buffer);
-				//vkCmdDraw(render_cmd_buffer.Get(), 36, 1, 0, 0);
-				m_vertex_buffer.Bind(render_cmd_buffer);
-				vkCmdDraw(render_cmd_buffer.Get(), m_vertex_buffer.GetSize() / sizeof(Vertex), 1, 0, 0);
+				if(m_vertex_buffer.IsInit())
+				{
+					m_vertex_buffer.Bind(render_cmd_buffer);
+					vkCmdDraw(render_cmd_buffer.Get(), m_vertex_buffer.GetSize() / sizeof(Vertex), 1, 0, 0);
+				}
 
 				m_graphic_pipeline.EndPipeline(render_cmd_buffer);
 				m_renderer.EndFrame();
@@ -172,6 +131,7 @@ namespace Yavr
 
 			if(m_running)
 				m_running = !m_inputs.HasRecievedCloseEvent();
+			first_run = false;
 		}
 	}
 
@@ -179,7 +139,6 @@ namespace Yavr
 	{
 		vkDeviceWaitIdle(RenderCore::Get().GetDevice().Get());
 		m_ubo_compute_generator.Destroy();
-		m_vertex_buffer_cube.Destroy();
 		m_vertex_buffer.Destroy();
 		m_compute_pipeline.Destroy();
 		m_graphic_pipeline.Destroy();

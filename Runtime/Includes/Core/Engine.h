@@ -34,7 +34,6 @@ namespace Yavr
 			Inputs m_inputs;
 			UniformBuffer m_ubo_compute_generator;
 			VertexBuffer m_vertex_buffer;
-			VertexBuffer m_vertex_buffer_cube;
 			Window m_window;
 			MatricesData m_matrices;
 			std::uint32_t m_iterations = 3;

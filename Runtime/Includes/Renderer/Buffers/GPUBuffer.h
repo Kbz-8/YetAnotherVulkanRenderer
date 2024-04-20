@@ -35,6 +35,8 @@ namespace Yavr
 			inline VkDeviceSize GetSize() const noexcept { return m_size; }
 			inline VkDeviceSize GetOffset() const noexcept { return m_offset; }
 
+			inline bool IsInit() const noexcept { return m_buffer != VK_NULL_HANDLE; }
+
 			~GPUBuffer() = default;
 
 		protected:
