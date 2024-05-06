@@ -101,7 +101,8 @@ namespace Yavr
 				cmd_buffer.BeginRecord();
 
 				m_compute_pipeline.BindPipeline(cmd_buffer);
-				vkCmdDispatch(cmd_buffer.Get(), m_vertex_buffer.GetSize() / 64, 1, 1);
+				std::uint32_t group_size = std::cbrt(m_vertex_buffer.GetSize());
+				vkCmdDispatch(cmd_buffer.Get(), group_size, group_size, group_size);
 
 				cmd_buffer.EndRecord();
 				cmd_buffer.Submit(CommandBufferSubmit::Compute, nullptr, nullptr);

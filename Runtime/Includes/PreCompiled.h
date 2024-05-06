@@ -22,6 +22,7 @@
 #include <memory>
 #include <filesystem>
 #include <fstream>
+#include <cmath>
 
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>

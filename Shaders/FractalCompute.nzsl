@@ -1,7 +1,7 @@
 [nzsl_version("1.0")]
 module;
 
-const workgroup_size = vec3[u32](u32(64), u32(1), u32(1));
+const workgroup_size = vec3[u32](u32(8), u32(8), u32(8));
 
 [layout(std430)]
 struct SSBO
@@ -88,7 +88,7 @@ fn AddCube(global_index : u32, cube_pos : vec4[f32]) -> u32
 fn main(input : Input)
 {
 	let global_index : u32 = input.indices.x + input.indices.y * workgroup_size.x + input.indices.z * workgroup_size.x * workgroup_size.y;
-	let cube_pos : vec4[f32] = vec4[f32](vec3[f32](input.indices) / vec3[f32](4.0, 4.0, 4.0), 1.0);
+	let cube_pos : vec4[f32] = vec4[f32](vec3[f32](input.indices) / vec3[f32](workgroup_size), 1.0);
 
 	for i in 0 -> i32(ubo.iterations)
 	{
